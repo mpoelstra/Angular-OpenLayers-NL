@@ -25,3 +25,15 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Used resources
+
+* https://github.com/bartvde/PDOK-OpenLayers3/blob/master/script.js
+* https://openlayers.org/
+* https://www.npmjs.com/package/ol
+* https://github.com/quentin-ol/ngx-openlayers
+* https://www.pdok.nl/nl/producten/pdok-locatieserver
+* http://pdokviewer.pdok.nl/
+* https://github.com/PDOK/locatieserver/wiki/API-Locatieserver
+* https://alligator.io/angular/real-time-search-angular-rxjs/
+
