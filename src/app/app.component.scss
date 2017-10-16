@@ -1,0 +1,11 @@
+.controls {
+    position: fixed;
+    top: .5em;
+    right: .5em;
+    width: 300px;
+    overflow: hidden;
+
+    mat-form-field {
+        width: 100%;
+    }
+}

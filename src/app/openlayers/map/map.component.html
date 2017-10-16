@@ -1,0 +1,6 @@
+<div id="map" tabindex="0"></div>
+<mat-card class="debug">
+  <div>{{coordinate}}</div>
+  <div>Zoomlevel: {{map.getView().getZoom() ? map.getView().getZoom().toFixed(2) : ''}}</div>
+  <div>Projection: {{map.getView().getProjection().getCode()}}</div>
+</mat-card>
