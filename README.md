@@ -2,6 +2,8 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.5.
 
+Just a prototype app to have fun with [PDOK](https://github.com/PDOK/locatieserver/wiki/API-Locatieserver) and learn things about Geo/Gis
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
