@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
+import { LookupObject } from './lookup-object';
+
 @Injectable()
 export class LookupService {
   private lookupUrl: string = 'http://geodata.nationaalgeoregister.nl/locatieserver/v3/lookup';
@@ -9,12 +11,12 @@ export class LookupService {
 
   constructor(private http: Http) { }
 
-  lookup(id: string): Promise<any> {
+  lookup(id: string): Promise<LookupObject[]> {
     console.log('Get lookup', encodeURI(this.lookupUrl + this.lookupQuery + id));
     return this.http
       .get(this.lookupUrl + this.lookupQuery + id)
       .toPromise()
-      .then(response => response.json().response.docs)
+      .then(response => response.json().response.docs as LookupObject[])
       .catch(this.handleError);
   }
 

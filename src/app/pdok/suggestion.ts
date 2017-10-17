@@ -2,9 +2,9 @@
  * NOTE: properties are optional with below syntax when explicitly creating a new instance
  * and can only be assigned after creating a new instance:
  *
- * let movie = new Movie();
- * movie.id = 1;
- * movie.weergavenaam = ...;
+ * let suggestion = new Suggestion();
+ * suggestion.id = 1;
+ * suggestion.weergavenaam = ...;
  * 
  * @export
  * @class Suggestion

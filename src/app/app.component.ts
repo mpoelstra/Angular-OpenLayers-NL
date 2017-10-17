@@ -4,6 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import { SuggestService } from './pdok/suggest.service';
 import { LookupService } from './pdok/lookup.service';
 import { Suggestion } from './pdok/suggestion';
+import { LookupObject } from './pdok/lookup-object';
 
 @Component({
   selector: 'app-root',
@@ -20,11 +21,11 @@ export class AppComponent implements OnInit {
   public searchInput: string;
   
   //needed to show the suggestions or no results
-  public suggestionResults: any[];
+  public suggestionResults: Suggestion[];
   public suggestionCount: number;
 
   //needed if we want to show the results of the lookUp service, can this be more than 1? Now it's always one.
-  public lookupResults: any[];
+  public lookupResults: LookupObject[];
 
   //boolen to show/hide stuff in the html
   public searching = false;
@@ -48,7 +49,7 @@ export class AppComponent implements OnInit {
     .subscribe(results => {
       //console.log(results);
       this.suggestionResults = results.response.docs;
-      this.suggestionCount = results.response.numFound;
+      this.suggestionCount = results.response.numFound; 
     });
   }
 
@@ -68,11 +69,11 @@ export class AppComponent implements OnInit {
     });
   }
 
-  onLookupClicked(lookupObject: any) {
+  onLookupClicked(lookupObject: LookupObject) {
     this.showOnMap(lookupObject);
   }
 
-  showOnMap(lookupObject: any) {
+  showOnMap(lookupObject: LookupObject) {
     let regExp:RegExp = /\(([^)]+)\)/;
     let matches = regExp.exec(lookupObject.centroide_rd);
     let newZoomLevel: number;
