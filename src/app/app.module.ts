@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { MatInputModule, MatListModule, MatCardModule } from '@angular/material';
+import { MatInputModule, MatListModule, MatCardModule, MatExpansionModule, MatButtonModule, MatIconModule } from '@angular/material';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
@@ -24,7 +24,10 @@ import { LookupService } from './pdok/lookup.service';
     FormsModule,
     MatInputModule,
     MatListModule,
-    MatCardModule
+    MatCardModule,
+    MatExpansionModule,
+    MatButtonModule,
+    MatIconModule
   ],
   providers: [
     SuggestService,

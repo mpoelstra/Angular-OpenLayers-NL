@@ -5,6 +5,7 @@ import { SuggestService } from './pdok/suggest.service';
 import { LookupService } from './pdok/lookup.service';
 import { Suggestion } from './pdok/suggestion';
 import { LookupObject } from './pdok/lookup-object';
+import { MapPointerEvent } from './openlayers/map/map-pointer-event';
 
 @Component({
   selector: 'app-root',
@@ -25,17 +26,24 @@ export class AppComponent implements OnInit {
   public suggestionCount: number;
 
   //needed if we want to show the results of the lookUp service, can this be more than 1? Now it's always one.
-  public lookupResults: LookupObject[];
+  public lookupResult: LookupObject;
 
   //boolen to show/hide stuff in the html
   public searching = false;
+
+  //being set when clicked on map
+  public selectedPoint : MapPointerEvent;
+
+  //dummy
+  public aliasses: string[] = [
+    'Home', 'Thuis', 'Paradijs'
+  ]
 
   //string array observable
   private searchTerm$ = new Subject<string>();  
 
   constructor(private suggestService: SuggestService, private lookupService: LookupService) {
     this.suggestionResults = [];
-    this.lookupResults = [];
   }
 
   ngOnInit() {
@@ -64,7 +72,7 @@ export class AppComponent implements OnInit {
 
     this.lookupService.lookup(suggestion.id).then(result => {
       console.log(result[0]);
-      //this.lookupResults = result;
+      this.lookupResult = result[0];
       this.showOnMap(result[0]);
     });
   }
@@ -74,6 +82,7 @@ export class AppComponent implements OnInit {
   }
 
   showOnMap(lookupObject: LookupObject) {
+    console.log('showOnMap');
     let regExp:RegExp = /\(([^)]+)\)/;
     let matches = regExp.exec(lookupObject.centroide_rd);
     let newZoomLevel: number;
@@ -100,6 +109,17 @@ export class AppComponent implements OnInit {
     this.searchInput = lookupObject.weergavenaam;
     
     console.log('newCenter: ', this.mapCenter);
+  }
+
+  onMapClicked(event: MapPointerEvent) {
+    console.log('onMapClicked');
+    console.log(event);
+    this.selectedPoint = event;
+  }
+
+  centerMap(selectedPoint: MapPointerEvent) {
+    this.mapZoom = selectedPoint.zoom;
+    this.mapCenter = selectedPoint.coordinate;
   }
   
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
 import Map from 'ol/map';
 import View from 'ol/view';
 import TileLayer from 'ol/layer/tile';
@@ -10,6 +10,8 @@ import TileGrid from 'ol/tilegrid/tilegrid';
 import Proj from 'ol/proj';
 import Projection from 'ol/proj/projection';
 import Coordinate from 'ol/coordinate';
+import Interaction from 'ol/interaction';
+import { MapPointerEvent } from './map-pointer-event';
 
 @Component({
   selector: 'app-map',
@@ -20,12 +22,26 @@ export class MapComponent implements OnInit, OnChanges {
   @Input() center: number[];
   @Input() zoom: number;
 
+  @Output() mapClicked = new EventEmitter();
+
   public map;
   public debug: object;
   public coordinate: string;
+  public backgrounds: string[];
+  public backgroundRandom: string;
 
   constructor() { 
     this.coordinate = `X: , Y: `;
+
+    this.backgrounds = [
+      'hearts',
+      'blueprint',
+      'rainbow',
+      'weave',
+      'japanesecube',
+      'stars'
+    ];
+    this.backgroundRandom = this.backgrounds[Math.floor(Math.random() * this.backgrounds.length)];
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -70,6 +86,7 @@ export class MapComponent implements OnInit, OnChanges {
 
     this.map = new Map({
       target: 'map',
+      interactions: Interaction.defaults({doubleClickZoom :false}),
       layers: [
         new TileLayer({
           //source: new OSM()
@@ -100,6 +117,13 @@ export class MapComponent implements OnInit, OnChanges {
         center: this.center,
         zoom: this.zoom
       })
+    });
+
+    this.map.on('click', (event) => {
+      let mapEvent = new MapPointerEvent(event.coordinate, event.map, event.orginalEvent, event.pixel, event.type);
+      console.log('clicked on coordinate', event.coordinate);
+      console.log('clicked on pixel', event.pixel);
+      this.mapClicked.emit(mapEvent);
     });
   }
 

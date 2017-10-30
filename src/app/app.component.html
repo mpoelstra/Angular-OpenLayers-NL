@@ -1,22 +1,66 @@
-<app-map [center]="mapCenter" [zoom]="mapZoom"></app-map>
-<mat-card class="controls">
+<div class="view">
+  <app-map class="view_map" [center]="mapCenter" [zoom]="mapZoom" (mapClicked)="onMapClicked($event)"></app-map>
+  <mat-card class="view_controls">
 
-  <form name="search">
-    <mat-form-field>
-      <input type="text" [(ngModel)]="searchInput" (keyup)="onSearch($event)" name="address" matInput placeholder="Enter an address">
-    </mat-form-field>
-  </form>
+    <form name="search">
+      <mat-form-field>
+        <input type="text" autocomplete="off" [(ngModel)]="searchInput" (keyup)="onSearch($event)" name="address" matInput placeholder="Enter an address">
+      </mat-form-field>
+    </form>
 
-  <div *ngIf="searching && searchInput">
-    <mat-nav-list *ngIf="suggestionResults.length">
-        <a mat-list-item href="#" (click)="onSuggestionClicked(suggestion)" *ngFor="let suggestion of suggestionResults | slice:0:10">{{ suggestion.weergavenaam }}</a>
-    </mat-nav-list>
-    <p *ngIf="suggestionCount === 0">Geen resultaten</p>
-  </div>
-
-  <div *ngIf="lookupResults && !searching">
-      <mat-nav-list *ngIf="lookupResults.length">
-          <a mat-list-item href="#" (click)="onLookupClicked(lookup)" *ngFor="let lookup of lookupResults | slice:0:10"><span><strong>{{ lookup.bron }}</strong>&nbsp;-&nbsp;{{ lookup.weergavenaam }}</span></a>
+    <div *ngIf="searching && searchInput">
+      <mat-nav-list *ngIf="suggestionResults.length">
+          <a mat-list-item href="#" (click)="onSuggestionClicked(suggestion)" *ngFor="let suggestion of suggestionResults | slice:0:10">{{ suggestion.weergavenaam }}</a>
       </mat-nav-list>
-  </div>
-</mat-card>
+      <p *ngIf="suggestionCount === 0">Geen resultaten</p>
+    </div>
+
+    <mat-accordion>
+      <mat-expansion-panel *ngIf="lookupResult && lookupResult.weergavenaam == searchInput">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Ruwe informatie van dit zoekresultaat
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        
+        <div>
+            <pre>{{lookupResult | json}}</pre>
+        </div>
+        <button mat-raised-button color="primary" (click)="showOnMap(lookupResult)">Centreer op de kaart</button>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel *ngIf="lookupResult && lookupResult.weergavenaam == searchInput">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Acties voor dit zoekresultaat
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          
+          <h2>Aliassen beheren</h2>
+          <mat-nav-list>
+            <mat-list-item *ngFor="let alias of aliasses">
+                <mat-icon matListIcon color="primary">mode_edit</mat-icon>
+                <p matLine>{{alias}}</p>
+            </mat-list-item>
+          </mat-nav-list>
+
+        </mat-expansion-panel>
+
+      <mat-expansion-panel *ngIf="selectedPoint">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Geklikt op {{selectedPoint.coordinate[0].toFixed(2)}}, {{selectedPoint.coordinate[1].toFixed(2)}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          
+          <h2>Coordinaat</h2>
+          <p>({{selectedPoint.coordinate[0].toFixed(2)}}, {{selectedPoint.coordinate[1].toFixed(2)}})</p>
+
+          <h2>Pixel</h2>
+          <p>({{selectedPoint.pixel[0].toFixed(2)}}, {{selectedPoint.pixel[1].toFixed(2)}})</p>
+
+          <button mat-raised-button color="primary" (click)="centerMap(selectedPoint)">Centreer op de kaart</button>
+        </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card>
+</div>

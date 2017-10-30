@@ -1,11 +1,20 @@
-.controls {
+.view {
     position: fixed;
-    top: .5em;
-    right: .5em;
-    width: 300px;
-    overflow: hidden;
-
-    mat-form-field {
-        width: 100%;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    .view_map {
+        width: 75%;
+    }
+    .view_controls {
+        width: 25%;
+        overflow: hidden;
+        overflow-y: auto;
+        background: #f7f7f7;
+        
+        mat-form-field {
+            width: 100%;
+        }
     }
 }
