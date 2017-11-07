@@ -5,7 +5,7 @@ import { SuggestService } from './pdok/suggest.service';
 import { LookupService } from './pdok/lookup.service';
 import { Suggestion } from './pdok/suggestion';
 import { LookupObject } from './pdok/lookup-object';
-import { MapPointerEvent } from './openlayers/map/map-pointer-event';
+import { MapPointerEvent } from './openlayers/util/map-pointer-event';
 
 @Component({
   selector: 'app-root',
@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
 
     //default mapView values
     this.mapCenter = [150000, 450000];
-    this.mapZoom = 3;
+    this.mapZoom = 8;
 
     //will only go into subscribe method when searchTems&.next is being called
     this.suggestService.search(this.searchTerm$)

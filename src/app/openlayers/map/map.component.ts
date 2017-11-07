@@ -6,12 +6,16 @@ import Zoom from 'ol/control/zoom';
 import ZoomSlider from 'ol/control/zoomslider';
 import MousePosition from 'ol/control/mouseposition';
 import TileImage from 'ol/source/tileimage';
+import Xyz from 'ol/source/xyz';
+import WmtsSource from 'ol/source/wmts';
 import TileGrid from 'ol/tilegrid/tilegrid';
+import WmtsGrid from 'ol/tilegrid/wmts';
 import Proj from 'ol/proj';
 import Projection from 'ol/proj/projection';
 import Coordinate from 'ol/coordinate';
 import Interaction from 'ol/interaction';
-import { MapPointerEvent } from './map-pointer-event';
+import Extent from 'ol/extent';
+import { MapPointerEvent } from '../util/map-pointer-event';
 
 @Component({
   selector: 'app-map',
@@ -62,27 +66,44 @@ export class MapComponent implements OnInit, OnChanges {
     let proj = Proj;
 
     //source: https://github.com/bartvde/PDOK-OpenLayers3/blob/master/script.js
-    let extent = [-285401.92,22598.08,595401.9199999999,903401.9199999999];
-    let resolutions = [3440.640, 1720.320, 860.160, 430.080, 215.040, 107.520, 53.760, 26.880, 13.440, 6.720, 3.360, 1.680, 0.840, 0.420];
+    let projectionExtent = [-285401.92,22598.08,595401.9199999999,903401.9199999999];
+    let resolutions = [3440.64, 1720.32, 860.16, 430.08, 215.04, 107.52, 53.76, 26.88, 13.44, 6.72, 3.36, 1.68, 0.84, 0.42]
+    let matrixIds = [];
+    for (var z = 0; z < 14; ++z) {
+      // generate resolutions and matrixIds arrays for this WMTS
+      matrixIds[z] = 'EPSG:28992:' + z;
+    }
+
+    console.log(resolutions);
+    console.log(matrixIds);
+
+
     let url = 'http://geodata.nationaalgeoregister.nl/tms/1.0.0/brtachtergrondkaart/';
 
-
     let tileUrlFunction = function(tileCoord, pixelRatio, projection) {
-      var zxy = tileCoord;
+      let zxy = tileCoord;
+      let retVal = '';
+
+      
       if (zxy[1] < 0 || zxy[2] < 0) {
-        return '';
+        retVal = '';
       }
-      return `${url}${zxy[0].toString()}/${zxy[1].toString()}/${zxy[2].toString()}.png`;
+      retVal = `${url}${zxy[0].toString()}/${zxy[1].toString()}/${zxy[2].toString()}.png`;
+
+      console.log(retVal);
+      return retVal;
     };
+
+
 
     let dutchProjection = new Projection({
       code: 'EPSG:28992',
       // The extent is used to determine zoom level 0. Recommended values for a
       // projection's validity extent can be found at https://epsg.io/.
-      extent: extent,
+      extent: projectionExtent,
       units: 'm'
     });
-    proj.addProjection(dutchProjection); //really needed??
+    //proj.addProjection(dutchProjection); //really needed??
 
     this.map = new Map({
       target: 'map',
@@ -112,10 +133,10 @@ export class MapComponent implements OnInit, OnChanges {
       ],
       view: new View({
         minZoom: 3,
-        maxZoom: 13,
+        maxZoom: 20,
         projection: dutchProjection,        
         center: this.center,
-        zoom: this.zoom
+        zoom: 3
       })
     });
 

@@ -4,3 +4,19 @@ html, body {
     font-family: Roboto,"Helvetica Neue",sans-serif;
     font-size: 16px;
 }
+
+html {
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+//overrides angular material
+.mat-tab-label {
+    min-width: 0 !important;
+}
+
+.mat-tab-body-wrapper {
+    //margin-top: .5em;   
+}

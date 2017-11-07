@@ -1,0 +1,58 @@
+<div class="map-wrapper">
+  <mat-card class="map-layers">
+      <mat-tab-group>
+        <mat-tab label="Layers">
+          <div class="tab-content">
+            <mat-accordion [multi]="true">
+              <mat-expansion-panel *ngFor="let group of layerGroup">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{group.label}}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div>
+                    <mat-button-toggle-group class="layer-group" multiple [vertical]="true">
+                      <mat-button-toggle class="layer-group-button" [value]="layer.value" *ngFor="let layer of group.layers" (click)="toggleLayer($event, group, layer)">
+                        <span>{{layer.label}}</span>
+                      </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </mat-tab>
+        <mat-tab label="Legenda">
+            <div class="tab-content">
+              <div *ngFor="let key of objectKeys(layerLegends)">
+                  <mat-card>
+                      <mat-card-header>
+                        <mat-card-title>{{layerLegends[key].label}}</mat-card-title>
+                      </mat-card-header>
+                      <mat-card-content>
+                          <img [src]="layerLegends[key].legend">                            
+                      </mat-card-content>
+                  </mat-card>
+              </div>
+              <div *ngIf="!objectKeys(layerLegends).length">
+                Selecteer eerst een layer
+              </div>
+            </div>
+        </mat-tab>
+      </mat-tab-group>
+    
+    <div class="debug">
+      <div *ngIf="coordinate">x: {{coordinate.x}}</div>
+      <div *ngIf="coordinate">y: {{coordinate.y}}</div>
+      <div>Zoomlevel: {{map.getView().getZoom() ? map.getView().getZoom().toFixed(2) : ''}}</div>
+      <div>Projection: {{map.getView().getProjection().getCode()}}</div>
+    </div>
+  </mat-card>
+  <div id="map" tabindex="0"></div>
+</div>
+<div class="button-row">
+    <mat-button-toggle-group class="button-group" [(ngModel)]="currentLayer">
+      <mat-button-toggle class="button-group-button" [value]="layer.value" *ngFor="let layer of wmtsLayers" (click)="setSourceLayer(layer.value)">
+        <span>{{layer.label}}</span>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+</div>
