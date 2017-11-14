@@ -46,20 +46,49 @@
 
         </mat-expansion-panel>
 
-      <mat-expansion-panel *ngIf="selectedPoint">
+      <mat-expansion-panel *ngIf="selectedPoint" expanded="true">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Geklikt op {{selectedPoint.coordinate[0].toFixed(2)}}, {{selectedPoint.coordinate[1].toFixed(2)}}
             </mat-panel-title>
           </mat-expansion-panel-header>
+
+          <div class="block">
+            <section class="feature">
+              <div class="feature__row">
+                <div class="feature__wrapper">
+                  <div>Coordinaat</div>
+                  <div>{{selectedPoint.coordinate[0].toFixed(2)}}, {{selectedPoint.coordinate[1].toFixed(2)}}</div>
+                </div>
+                <div class="feature__wrapper">
+                  <div>Pixel</div>
+                  <div>{{selectedPoint.pixel[0].toFixed(2)}}, {{selectedPoint.pixel[1].toFixed(2)}}</div>
+                </div>
+              </div>
+            </section>
+
+            <button mat-raised-button color="primary" (click)="centerMap(selectedPoint)">Centreer op de kaart</button>
+          </div>
+
+          <div class="block">
+
+            <mat-progress-spinner class="spinner" color="primary" mode="indeterminate" *ngIf="showFeaturesSpinner"></mat-progress-spinner>
+
+            <section class="feature" *ngFor="let featureResult of featureResults">
+              <header *ngIf="featureResult.features && featureResult.features.length">
+                <h1>{{featureResult.label}}</h1>
+              </header>
+              <div *ngIf="featureResult.features && featureResult.features.length" class="feature__row">
+                <div class="feature__wrapper" *ngFor="let key of objectKeys(featureResult.features[0].properties)">
+                  <div *ngIf="featureResult.features[0].properties[key]">{{key}}</div>
+                  <div *ngIf="featureResult.features[0].properties[key]">{{featureResult.features[0].properties[key]}}</div>
+                </div>
+              </div>
+            </section>
+
+          </div>
+
           
-          <h2>Coordinaat</h2>
-          <p>({{selectedPoint.coordinate[0].toFixed(2)}}, {{selectedPoint.coordinate[1].toFixed(2)}})</p>
-
-          <h2>Pixel</h2>
-          <p>({{selectedPoint.pixel[0].toFixed(2)}}, {{selectedPoint.pixel[1].toFixed(2)}})</p>
-
-          <button mat-raised-button color="primary" (click)="centerMap(selectedPoint)">Centreer op de kaart</button>
         </mat-expansion-panel>
     </mat-accordion>
   </mat-card>

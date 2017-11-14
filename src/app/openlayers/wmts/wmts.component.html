@@ -3,7 +3,7 @@
       <mat-tab-group>
         <mat-tab label="Layers">
           <div class="tab-content">
-            <mat-accordion [multi]="true">
+            <mat-accordion multi>
               <mat-expansion-panel *ngFor="let group of layerGroup">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
@@ -11,7 +11,7 @@
                   </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div>
-                    <mat-button-toggle-group class="layer-group" multiple [vertical]="true">
+                    <mat-button-toggle-group class="layer-group" multiple vertical>
                       <mat-button-toggle class="layer-group-button" [value]="layer.value" *ngFor="let layer of group.layers" (click)="toggleLayer($event, group, layer)">
                         <span>{{layer.label}}</span>
                       </mat-button-toggle>
@@ -55,4 +55,9 @@
         <span>{{layer.label}}</span>
       </mat-button-toggle>
     </mat-button-toggle-group>
+</div>
+<div class="button-location">
+  <button mat-icon-button color="primary" (click)="getUserLocation()">
+    <mat-icon aria-label="Example icon-button with a heart icon">location_searching</mat-icon>
+  </button>
 </div>

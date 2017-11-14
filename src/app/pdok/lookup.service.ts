@@ -1,22 +1,31 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 
 import { LookupObject } from './lookup-object';
+
+interface IlookupResponse {
+  response: {
+    docs: LookupObject[],
+    maxScore: number,
+    numFound: number,
+    start: number
+  }
+}
 
 @Injectable()
 export class LookupService {
   private lookupUrl: string = 'http://geodata.nationaalgeoregister.nl/locatieserver/v3/lookup';
   private lookupQuery: string = '?id=';
 
-  constructor(private http: Http) { }
+  constructor(private http: HttpClient) { }
 
   lookup(id: string): Promise<LookupObject[]> {
     console.log('Get lookup', encodeURI(this.lookupUrl + this.lookupQuery + id));
     return this.http
-      .get(this.lookupUrl + this.lookupQuery + id)
+      .get<IlookupResponse>(this.lookupUrl + this.lookupQuery + id)
       .toPromise()
-      .then(response => response.json().response.docs as LookupObject[])
+      .then(result => result.response.docs)
       .catch(this.handleError);
   }
 

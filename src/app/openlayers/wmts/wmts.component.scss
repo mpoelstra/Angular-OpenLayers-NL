@@ -6,7 +6,7 @@
 }
 
 .map-layers {
-    width: 35%;
+    width: 30%;
     overflow: hidden;
     overflow-y: auto;
     background: #f7f7f7;
@@ -16,7 +16,7 @@
 }
 
 #map {
-    width: 100%;
+    width: 70%;
     height: 100%;
     background: black;
 }
@@ -41,6 +41,12 @@
     position: absolute;
     right: .5em;
     top: .5em;
+}
+
+.button-location {
+    position: absolute;
+    left: 30%;
+    bottom: .5em;
 }
 
 .button-group {

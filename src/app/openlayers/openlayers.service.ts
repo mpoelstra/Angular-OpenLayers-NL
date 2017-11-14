@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import Proj from 'ol/proj';
 import Projection from 'ol/proj/projection';
 import Extent from 'ol/extent';
 import TileLayer from 'ol/layer/tile';
@@ -55,6 +56,8 @@ export class OpenlayersService {
           units: units
       })
     }
+
+    //Proj.addProjection(this.projectionConfig.projection); //really needed??
   }
 
   private setBaseLayers() {
@@ -80,6 +83,7 @@ export class OpenlayersService {
       })
     )
 
+    //https://geodata.nationaalgeoregister.nl/bestuurlijkegrenzen/wms?request=GetCapabilities
     /*
     let test = new TileLayer({
       source: new TileWmsSource({

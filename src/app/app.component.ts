@@ -7,6 +7,8 @@ import { Suggestion } from './pdok/suggestion';
 import { LookupObject } from './pdok/lookup-object';
 import { MapPointerEvent } from './openlayers/util/map-pointer-event';
 
+import { FeaturesService } from './openlayers/features.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -28,8 +30,13 @@ export class AppComponent implements OnInit {
   //needed if we want to show the results of the lookUp service, can this be more than 1? Now it's always one.
   public lookupResult: LookupObject;
 
+  //needed to show WMS services getFeatureInfo results
+  public featureResults;
+  public objectKeys = Object.keys;
+  public showFeaturesSpinner: boolean = false;
+
   //boolen to show/hide stuff in the html
-  public searching = false;
+  public searching: boolean = false;
 
   //being set when clicked on map
   public selectedPoint : MapPointerEvent;
@@ -42,8 +49,9 @@ export class AppComponent implements OnInit {
   //string array observable
   private searchTerm$ = new Subject<string>();  
 
-  constructor(private suggestService: SuggestService, private lookupService: LookupService) {
+  constructor(private suggestService: SuggestService, private lookupService: LookupService, private featuresService: FeaturesService) {
     this.suggestionResults = [];
+    this.featureResults = [];
   }
 
   ngOnInit() {
@@ -114,7 +122,37 @@ export class AppComponent implements OnInit {
   onMapClicked(event: MapPointerEvent) {
     console.log('onMapClicked');
     console.log(event);
+    //debugger;
     this.selectedPoint = event;
+
+    //reset;
+    this.featureResults = [];
+    this.showFeaturesSpinner = false;
+
+    if (event.features && event.features.length) {
+      this.showFeaturesSpinner = true;
+      this.featuresService.getAllFeatures(event.features)
+        .subscribe(
+          (results) => {
+            this.featureResults = results;
+            for (let i = 0; i < this.featureResults.length; i++) { 
+                this.featureResults[i].label = event.features[i].label;
+            }
+            this.showFeaturesSpinner = false;
+          },
+          err => {
+            console.log('getAllFeatures error', err);
+          },
+          () => {
+            console.log('getAllFeatures completed');
+          }
+        );
+      /*
+      this.featuresService.getAllFeatures(event.features).then(result => {
+        //console.log(result[0]);
+      });
+      */
+    }
   }
 
   centerMap(selectedPoint: MapPointerEvent) {

@@ -1,8 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { MatInputModule, MatButtonToggleModule, MatListModule, MatCardModule, MatExpansionModule, MatButtonModule, MatIconModule, MatTabsModule } from '@angular/material';
+import { MatInputModule, MatButtonToggleModule, MatListModule, MatCardModule, MatExpansionModule, MatButtonModule, MatIconModule, MatTabsModule, MatProgressSpinnerModule } from '@angular/material';
 import { NgModule } from '@angular/core';
 
 //components
@@ -14,6 +14,7 @@ import { WmtsComponent } from './openlayers/wmts/wmts.component';
 import { SuggestService  } from './pdok/suggest.service';
 import { LookupService } from './pdok/lookup.service';
 import { OpenlayersService } from './openlayers/openlayers.service';
+import { FeaturesService } from './openlayers/features.service';
 
 
 @NgModule({
@@ -24,7 +25,7 @@ import { OpenlayersService } from './openlayers/openlayers.service';
   ],
   imports: [
     BrowserModule,
-    HttpModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
     MatInputModule,
@@ -34,12 +35,14 @@ import { OpenlayersService } from './openlayers/openlayers.service';
     MatExpansionModule,
     MatButtonModule,
     MatIconModule,
-    MatTabsModule
+    MatTabsModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     SuggestService,
     LookupService,
-    OpenlayersService
+    OpenlayersService,
+    FeaturesService
   ],
   bootstrap: [AppComponent]
 })
