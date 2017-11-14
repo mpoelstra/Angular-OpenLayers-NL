@@ -162,6 +162,33 @@ export class OpenlayersService {
         ]
       },
       {
+        label: 'CBG Gebiedsindelingen',
+        url: 'https://geodata.nationaalgeoregister.nl/cbsgebiedsindelingen/wms',
+        type: 'wms',
+        layers: [
+          {
+            label: 'Brandweerregio 2010 gegeneraliseerd',
+            value: 'cbsgebiedsindelingen:cbs_brandweerregio_2010_gegeneraliseerd',
+            legend: 'https://geodata.nationaalgeoregister.nl/cbsgebiedsindelingen/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=cbsgebiedsindelingen%3Acbs_brandweerregio_2010_gegeneraliseerd'
+          },
+          {
+            label: 'Brandweerregio 2010 labelpoint',
+            value: 'cbsgebiedsindelingen:cbs_brandweerregio_2010_labelpoint',
+            legend: 'https://geodata.nationaalgeoregister.nl/cbsgebiedsindelingen/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=cbsgebiedsindelingen%3Acbs_brandweerregio_2010_labelpoint'
+          },
+          {
+            label: 'Buurt 2017 gegeneraliseerd',
+            value: 'cbsgebiedsindelingen:cbs_buurt_2017_gegeneraliseerd',
+            legend: 'https://geodata.nationaalgeoregister.nl/cbsgebiedsindelingen/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=cbsgebiedsindelingen%3Acbs_buurt_2017_gegeneraliseerd'
+          },
+          {
+            label: 'Buurt 2017 labelpoint',
+            value: 'cbsgebiedsindelingen:cbs_buurt_2017_labelpoint',
+            legend: 'https://geodata.nationaalgeoregister.nl/cbsgebiedsindelingen/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=cbsgebiedsindelingen%3Acbs_buurt_2017_labelpoint'
+          }
+        ]
+      },
+      {
         label: 'Nationale parken',
         url: 'https://geodata.nationaalgeoregister.nl/nationaleparken/wms',
         type: 'wms',
