@@ -7,12 +7,16 @@
 
 .map-layers {
     width: 30%;
+    height: 100%;
     overflow: hidden;
-    overflow-y: auto;
     background: #f7f7f7;
     position: relative;
     border-radius: 0;
     padding: .5em;
+
+    mat-tab-group {
+        height: calc(100% - 110px);
+    }
 }
 
 #map {
@@ -29,6 +33,8 @@
     left: .5em;
     right: .5em;
     padding: 24px;
+    height: 100px;
+    font-size: 10px;
     box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
     border-radius: 2px;
 
