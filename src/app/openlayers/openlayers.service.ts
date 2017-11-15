@@ -151,7 +151,7 @@ export class OpenlayersService {
           },
           {
             label: 'Panden',
-            value: 'bag',
+            value: 'pand',
             legend: 'https://geodata.nationaalgeoregister.nl/bag/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=ligplaats'
           },
           {
