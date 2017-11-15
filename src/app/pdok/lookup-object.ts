@@ -8,7 +8,7 @@ export class LookupObject {
     public gemeentecode: string;
     public weergavenaam: string;
     public straatnaam_verkort: string;
-    public id: string;
+    public id: string | number;
     public gekoppeld_perceel: string[];
     public gemeentenaam: string;
     public identificatie: string;
@@ -20,8 +20,10 @@ export class LookupObject {
     public nummeraanduiding_id: string;
     public adresseerbaarobject_id: string;
     public huisnummer: number;
+    public huisletter: string;
     public centroide_rd: string;
     public straatnaam: string;
+    public aliassen: string;
   }
   
   

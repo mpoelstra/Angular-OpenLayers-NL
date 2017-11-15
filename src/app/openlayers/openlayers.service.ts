@@ -145,14 +145,14 @@ export class OpenlayersService {
         type: 'wms',
         layers: [
           {
-            label: 'Verblijfsobject',
-            value: 'verblijfsobject',
-            legend: 'https://geodata.nationaalgeoregister.nl/bag/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=verblijfsobject'
-          },
-          {
             label: 'Panden',
             value: 'pand',
             legend: 'https://geodata.nationaalgeoregister.nl/bag/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=ligplaats'
+          },
+          {
+            label: 'Verblijfsobject',
+            value: 'verblijfsobject',
+            legend: 'https://geodata.nationaalgeoregister.nl/bag/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=verblijfsobject'
           },
           {
             label: 'Woonplaats',

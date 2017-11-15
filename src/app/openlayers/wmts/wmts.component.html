@@ -1,5 +1,5 @@
 <div class="map-wrapper">
-  <mat-card class="map-layers">
+  <div class="map-layers">
       <mat-tab-group>
         <mat-tab label="Layers">
           <div class="tab-content">
@@ -23,19 +23,17 @@
         </mat-tab>
         <mat-tab label="Legenda">
             <div class="tab-content">
-              <div *ngFor="let key of objectKeys(layerLegends)">
-                  <mat-card>
-                      <mat-card-header>
-                        <mat-card-title>{{layerLegends[key].label}}</mat-card-title>
-                      </mat-card-header>
-                      <mat-card-content>
-                          <img [src]="layerLegends[key].legend">                            
-                      </mat-card-content>
-                  </mat-card>
-              </div>
-              <div *ngIf="!objectKeys(layerLegends).length">
+              <mat-card *ngFor="let key of objectKeys(layerLegends)">
+                  <mat-card-header>
+                    <mat-card-title>{{layerLegends[key].label}}</mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                      <img [src]="layerLegends[key].legend">                            
+                  </mat-card-content>
+              </mat-card>
+              <mat-card *ngIf="!objectKeys(layerLegends).length">
                 Selecteer eerst een layer
-              </div>
+              </mat-card>
             </div>
         </mat-tab>
       </mat-tab-group>
@@ -46,7 +44,7 @@
       <div>Zoomlevel: {{map.getView().getZoom() ? map.getView().getZoom().toFixed(2) : ''}}</div>
       <div>Projection: {{map.getView().getProjection().getCode()}}</div>
     </div>
-  </mat-card>
+  </div>
   <div id="map" tabindex="0"></div>
 </div>
 <div class="button-row">

@@ -37,17 +37,15 @@ export class AppComponent implements OnInit {
 
   //boolen to show/hide stuff in the html
   public searching: boolean = false;
+  public lookingup: boolean = false;
 
   //being set when clicked on map
   public selectedPoint : MapPointerEvent;
 
-  //dummy
-  public aliasses: string[] = [
-    'Home', 'Thuis', 'Paradijs'
-  ]
-
   //string array observable
   private searchTerm$ = new Subject<string>();  
+
+  public selectedInputTab: number = 0;
 
   constructor(private suggestService: SuggestService, private lookupService: LookupService, private featuresService: FeaturesService) {
     this.suggestionResults = [];
@@ -77,16 +75,23 @@ export class AppComponent implements OnInit {
 
   onSuggestionClicked(suggestion: Suggestion) {
     this.searching = false;
+    this.lookingup = true;
 
-    this.lookupService.lookup(suggestion.id).then(result => {
-      console.log(result[0]);
-      this.lookupResult = result[0];
-      this.showOnMap(result[0]);
+    this.lookupService.getFakeLookUp(suggestion.id).then(result => {
+      console.log('fake result', result);
+      this.lookingup = false;      
+      this.selectedInputTab = 1;
+      this.lookupResult = result;
+      this.showOnMap(result);
+    }).catch((error) => {
+      this.lookupService.lookup(suggestion.id).then(result => {
+        console.log('real result', result[0]);
+        this.lookingup = false;        
+        this.selectedInputTab = 1;
+        this.lookupResult = result[0];
+        this.showOnMap(result[0]);
+      });
     });
-  }
-
-  onLookupClicked(lookupObject: LookupObject) {
-    this.showOnMap(lookupObject);
   }
 
   showOnMap(lookupObject: LookupObject) {
@@ -126,6 +131,7 @@ export class AppComponent implements OnInit {
     this.selectedPoint = event;
 
     //reset;
+    this.selectedInputTab = 2;
     this.featureResults = [];
     this.showFeaturesSpinner = false;
 
@@ -158,6 +164,12 @@ export class AppComponent implements OnInit {
   centerMap(selectedPoint: MapPointerEvent) {
     this.mapZoom = selectedPoint.zoom;
     this.mapCenter = selectedPoint.coordinate;
+  }
+
+  onSaveLookupResult(lookupObject: LookupObject) {
+    this.lookupService.updateFakeLookup(lookupObject).then((result) => {
+      console.log('lookupSaved', lookupObject);
+    });
   }
   
 }

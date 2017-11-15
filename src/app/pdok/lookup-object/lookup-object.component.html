@@ -1,0 +1,45 @@
+<mat-progress-spinner class="spinner" color="primary" mode="indeterminate" [class.show]="saving"></mat-progress-spinner>
+
+<form [formGroup]="lookupObjectForm" (ngSubmit)="onSaveClicked()" novalidate [class.is-saving]="saving">
+  <mat-form-field>
+    <input matInput type="text" placeholder="bron" name="bron" formControlName="bron" readonly>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="text" placeholder="type" name="type" formControlName="type">
+    <mat-icon matSuffix color="primary">mode_edit</mat-icon>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="text" placeholder="woonplaatsnaam" name="woonplaatsnaam" formControlName="woonplaatsnaam">
+    <mat-icon matSuffix color="primary">mode_edit</mat-icon>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="text" placeholder="weergavenaam" name="weergavenaam" formControlName="weergavenaam">
+    <mat-icon matSuffix color="primary">mode_edit</mat-icon>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="text" placeholder="gemeentenaam" name="gemeentenaam" formControlName="gemeentenaam">
+    <mat-icon matSuffix color="primary">mode_edit</mat-icon>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="number" placeholder="huisnummer" min="1" name="huisnummer" formControlName="huisnummer">
+    <mat-icon matSuffix color="primary">mode_edit</mat-icon>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="text" placeholder="huisletter" name="huisletter" formControlName="huisletter">
+    <mat-icon matSuffix color="primary">mode_edit</mat-icon>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="text" placeholder="straatnaam" name="straatnaam" formControlName="straatnaam">
+    <mat-icon matSuffix color="primary">mode_edit</mat-icon>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="text" placeholder="aliassen" #aliassen name="aliassen" formControlName="aliassen">
+    <mat-icon matSuffix color="primary">mode_edit</mat-icon>
+    <mat-hint align="start"><strong>Aliassen scheiden met een komma</strong> </mat-hint>
+  </mat-form-field>
+
+  <div class="button-row">
+    <button mat-raised-button color="primary" type="submit">Opslaan</button>
+    <button mat-raised-button (click)="onResetClicked(lookupObjectForm)" type="button">Reset</button>
+  </div>
+</form>

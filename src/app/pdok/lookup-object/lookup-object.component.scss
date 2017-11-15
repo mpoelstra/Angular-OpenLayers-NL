@@ -1,0 +1,22 @@
+form {
+    margin-bottom: 10px;
+}
+mat-form-field {
+    width: 100%;
+}
+
+.button-row {
+    margin-top: 20px;
+}
+
+.is-saving {
+    display: none;
+}
+
+.spinner {
+    display: none;
+    margin: 0 auto;
+    &.show {
+        display: block;
+    }
+}

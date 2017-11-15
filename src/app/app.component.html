@@ -1,95 +1,80 @@
 <div class="view">
   <app-wmts class="view_map" [center]="mapCenter" [zoom]="mapZoom" (mapClicked)="onMapClicked($event)"></app-wmts>
-  <mat-card class="view_controls">
-
-    <form name="search">
-      <mat-form-field>
-        <input type="text" autocomplete="off" [(ngModel)]="searchInput" (keyup)="onSearch($event)" name="address" matInput placeholder="Enter an address">
-      </mat-form-field>
-    </form>
-
-    <div *ngIf="searching && searchInput">
-      <mat-nav-list *ngIf="suggestionResults.length">
-          <a mat-list-item href="#" (click)="onSuggestionClicked(suggestion)" *ngFor="let suggestion of suggestionResults | slice:0:10">{{ suggestion.weergavenaam }}</a>
-      </mat-nav-list>
-      <p *ngIf="suggestionCount === 0">Geen resultaten</p>
-    </div>
-
-    <mat-accordion>
-      <mat-expansion-panel *ngIf="lookupResult && lookupResult.weergavenaam == searchInput">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Ruwe informatie van dit zoekresultaat
-          </mat-panel-title>
-        </mat-expansion-panel-header>
+  <div class="view_controls">
+    <mat-tab-group #ref [(selectedIndex)]="selectedInputTab">
+      <mat-tab label="Zoeken">
+        <div class="tab-content">
+          <mat-card>
+            <form name="search">
+              <mat-form-field>
+                <input type="text" autocomplete="off" [(ngModel)]="searchInput" (keyup)="onSearch($event)" name="address" matInput placeholder="Zoek een adres">
+              </mat-form-field>
+            </form>
         
-        <div>
-            <pre>{{lookupResult | json}}</pre>
+            <div *ngIf="searching && searchInput" class="suggestions">
+              <mat-nav-list *ngIf="suggestionResults.length">
+                  <a mat-list-item href="#" (click)="onSuggestionClicked(suggestion)" *ngFor="let suggestion of suggestionResults | slice:0:10">{{ suggestion.weergavenaam }}</a>
+              </mat-nav-list>
+              <p *ngIf="suggestionCount === 0">Geen resultaten</p>
+            </div>
+
+            <mat-progress-spinner class="spinner" color="primary" mode="indeterminate" *ngIf="lookingup"></mat-progress-spinner>
+          </mat-card>
         </div>
-        <button mat-raised-button color="primary" (click)="showOnMap(lookupResult)">Centreer op de kaart</button>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel *ngIf="lookupResult && lookupResult.weergavenaam == searchInput">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Acties voor dit zoekresultaat
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          
-          <h2>Aliassen beheren</h2>
-          <mat-nav-list>
-            <mat-list-item *ngFor="let alias of aliasses">
-                <mat-icon matListIcon color="primary">mode_edit</mat-icon>
-                <p matLine>{{alias}}</p>
-            </mat-list-item>
-          </mat-nav-list>
-
-        </mat-expansion-panel>
-
-      <mat-expansion-panel *ngIf="selectedPoint" expanded="true">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Geklikt op {{selectedPoint.coordinate[0].toFixed(2)}}, {{selectedPoint.coordinate[1].toFixed(2)}}
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-
-          <div class="block">
-            <section class="feature">
-              <div class="feature__row">
-                <div class="feature__wrapper">
-                  <div>Coordinaat</div>
-                  <div>{{selectedPoint.coordinate[0].toFixed(2)}}, {{selectedPoint.coordinate[1].toFixed(2)}}</div>
+      </mat-tab>
+      <mat-tab label="Wijzig">
+        <div class="tab-content">
+          <mat-card *ngIf="lookupResult && lookupResult.weergavenaam == searchInput">
+            <app-lookup-object [lookupObject]="lookupResult"></app-lookup-object>
+          </mat-card>
+          <mat-card *ngIf="!lookupResult || lookupResult.weergavenaam != searchInput">
+            Zoek en selecteer eerst een adres
+          </mat-card>
+        </div>
+      </mat-tab>
+      <mat-tab label="Info">
+        <div class="tab-content">
+          <mat-card *ngIf="selectedPoint">
+            <div class="block">
+              <section class="feature">
+                <div class="feature__row">
+                  <div class="feature__wrapper">
+                    <div>Coordinaat</div>
+                    <div>{{selectedPoint.coordinate[0].toFixed(2)}}, {{selectedPoint.coordinate[1].toFixed(2)}}</div>
+                  </div>
+                  <div class="feature__wrapper">
+                    <div>Pixel</div>
+                    <div>{{selectedPoint.pixel[0].toFixed(2)}}, {{selectedPoint.pixel[1].toFixed(2)}}</div>
+                  </div>
                 </div>
-                <div class="feature__wrapper">
-                  <div>Pixel</div>
-                  <div>{{selectedPoint.pixel[0].toFixed(2)}}, {{selectedPoint.pixel[1].toFixed(2)}}</div>
+              </section>
+
+              <button mat-raised-button color="primary" (click)="centerMap(selectedPoint)">Centreer op de kaart</button>
+            </div>
+    
+            <div class="block">
+
+              <mat-progress-spinner class="spinner" color="primary" mode="indeterminate" *ngIf="showFeaturesSpinner"></mat-progress-spinner>
+
+              <section class="feature" *ngFor="let featureResult of featureResults">
+                <header *ngIf="featureResult.features && featureResult.features.length">
+                  <h1>{{featureResult.label}}</h1>
+                </header>
+                <div *ngIf="featureResult.features && featureResult.features.length" class="feature__row">
+                  <div class="feature__wrapper" *ngFor="let key of objectKeys(featureResult.features[0].properties)">
+                    <div *ngIf="featureResult.features[0].properties[key]">{{key}}</div>
+                    <div *ngIf="featureResult.features[0].properties[key]">{{featureResult.features[0].properties[key]}}</div>
+                  </div>
                 </div>
-              </div>
-            </section>
+              </section>
 
-            <button mat-raised-button color="primary" (click)="centerMap(selectedPoint)">Centreer op de kaart</button>
-          </div>
-
-          <div class="block">
-
-            <mat-progress-spinner class="spinner" color="primary" mode="indeterminate" *ngIf="showFeaturesSpinner"></mat-progress-spinner>
-
-            <section class="feature" *ngFor="let featureResult of featureResults">
-              <header *ngIf="featureResult.features && featureResult.features.length">
-                <h1>{{featureResult.label}}</h1>
-              </header>
-              <div *ngIf="featureResult.features && featureResult.features.length" class="feature__row">
-                <div class="feature__wrapper" *ngFor="let key of objectKeys(featureResult.features[0].properties)">
-                  <div *ngIf="featureResult.features[0].properties[key]">{{key}}</div>
-                  <div *ngIf="featureResult.features[0].properties[key]">{{featureResult.features[0].properties[key]}}</div>
-                </div>
-              </div>
-            </section>
-
-          </div>
-
-          
-        </mat-expansion-panel>
-    </mat-accordion>
-  </mat-card>
+            </div>
+          </mat-card>
+          <mat-card *ngIf="!selectedPoint">
+            Klik ergens op de kaart.
+          </mat-card>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
 </div>
