@@ -140,6 +140,28 @@ export class OpenlayersService {
   public getLayerGroup() {
     let layerGroup = [
       {
+        label: 'BAG',
+        url: 'https://geodata.nationaalgeoregister.nl/bag/wms',
+        type: 'wms',
+        layers: [
+          {
+            label: 'Verblijfsobject',
+            value: 'verblijfsobject',
+            legend: 'https://geodata.nationaalgeoregister.nl/bag/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=verblijfsobject'
+          },
+          {
+            label: 'Panden',
+            value: 'bag',
+            legend: 'https://geodata.nationaalgeoregister.nl/bag/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=ligplaats'
+          },
+          {
+            label: 'Woonplaats',
+            value: 'woonplaats',
+            legend: 'https://geodata.nationaalgeoregister.nl/bag/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=woonplaats'
+          }
+        ]
+      },
+      {
         label: 'Bestuurlijke grenzen',
         url: 'https://geodata.nationaalgeoregister.nl/bestuurlijkegrenzen/wms',
         type: 'wms',
