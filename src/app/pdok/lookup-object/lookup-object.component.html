@@ -5,31 +5,33 @@
     <input matInput type="text" placeholder="bron" name="bron" formControlName="bron" readonly>
   </mat-form-field>
   <mat-form-field>
-    <input matInput type="text" placeholder="type" name="type" formControlName="type">
-    <mat-icon matSuffix color="primary">mode_edit</mat-icon>
+    <input matInput type="text" placeholder="weergavenaam" name="weergavenaam" formControlName="weergavenaam" readonly>
   </mat-form-field>
   <mat-form-field>
-    <input matInput type="text" placeholder="woonplaatsnaam" name="woonplaatsnaam" formControlName="woonplaatsnaam">
-    <mat-icon matSuffix color="primary">mode_edit</mat-icon>
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput type="text" placeholder="weergavenaam" name="weergavenaam" formControlName="weergavenaam">
-    <mat-icon matSuffix color="primary">mode_edit</mat-icon>
+    <input matInput type="text" #type placeholder="type" name="type" formControlName="type" readonly>
   </mat-form-field>
   <mat-form-field>
     <input matInput type="text" placeholder="gemeentenaam" name="gemeentenaam" formControlName="gemeentenaam">
     <mat-icon matSuffix color="primary">mode_edit</mat-icon>
   </mat-form-field>
-  <mat-form-field>
+  <mat-form-field *ngIf="lookupObject.type === 'adres'">
+    <input matInput type="text" placeholder="straatnaam" name="straatnaam" formControlName="straatnaam">
+    <mat-icon matSuffix color="primary">mode_edit</mat-icon>
+  </mat-form-field>
+  <mat-form-field *ngIf="lookupObject.type === 'adres'">
     <input matInput type="number" placeholder="huisnummer" min="1" name="huisnummer" formControlName="huisnummer">
     <mat-icon matSuffix color="primary">mode_edit</mat-icon>
   </mat-form-field>
-  <mat-form-field>
+  <mat-form-field *ngIf="lookupObject.type === 'adres'">
     <input matInput type="text" placeholder="huisletter" name="huisletter" formControlName="huisletter">
     <mat-icon matSuffix color="primary">mode_edit</mat-icon>
   </mat-form-field>
-  <mat-form-field>
-    <input matInput type="text" placeholder="straatnaam" name="straatnaam" formControlName="straatnaam">
+  <mat-form-field *ngIf="lookupObject.type === 'adres'">
+    <input matInput type="text" placeholder="postcode" name="postcode" formControlName="postcode">
+    <mat-icon matSuffix color="primary">mode_edit</mat-icon>
+  </mat-form-field>
+  <mat-form-field *ngIf="lookupObject.type !== 'gemeente'">
+    <input matInput type="text" placeholder="woonplaatsnaam" name="woonplaatsnaam" formControlName="woonplaatsnaam">
     <mat-icon matSuffix color="primary">mode_edit</mat-icon>
   </mat-form-field>
   <mat-form-field>

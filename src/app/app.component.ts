@@ -166,10 +166,9 @@ export class AppComponent implements OnInit {
     this.mapCenter = selectedPoint.coordinate;
   }
 
-  onSaveLookupResult(lookupObject: LookupObject) {
-    this.lookupService.updateFakeLookup(lookupObject).then((result) => {
-      console.log('lookupSaved', lookupObject);
-    });
+  onLookupResultSaved(lookupObject: LookupObject) {
+    this.lookupResult = lookupObject;
+    this.searchInput = this.lookupResult.weergavenaam;
   }
   
 }

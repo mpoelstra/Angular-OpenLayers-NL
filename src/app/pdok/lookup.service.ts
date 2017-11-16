@@ -42,12 +42,18 @@ export class LookupService {
   }
 
   updateFakeLookup(lookupObject: LookupObject): Promise<LookupObject> {
-    const url = `${this.fakeLookupUrl}/${lookupObject.id}`;
-    const json = JSON.stringify(lookupObject);
+    let postValue = Object.assign({}, lookupObject);
+    if (postValue.type === 'adres') {
+      postValue.weergavenaam = `${postValue.straatnaam} ${postValue.huisnummer}${postValue.huisletter}, ${postValue.postcode} ${postValue.woonplaatsnaam}`;
+    }
+    
+    const url = `${this.fakeLookupUrl}/${postValue.id}`;
+    const json = JSON.stringify(postValue);
+
     return this.oldHttp
       .put(url, json)
       .toPromise()
-      .then(() => lookupObject)
+      .then(() => postValue)
       .catch(this.handleError);
   }
 

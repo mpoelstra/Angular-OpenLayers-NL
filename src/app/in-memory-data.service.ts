@@ -10,6 +10,7 @@ export class InMemoryDataService implements InMemoryDbService {
           weergavenaam: 'Zilvermeer 2, 9735BA Groningen',
           gemeentenaam: 'Groningen',
           huisnummer: 2,
+          postcode: '9735BA',
           centroide_rd: 'POINT(236306.031 584009.003)',
           straatnaam: 'Zilvermeer',
           aliassen: 'Mooi huis'

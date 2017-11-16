@@ -11,7 +11,7 @@ import { LookupObject } from '../lookup-object';
 })
 export class LookupObjectComponent implements OnInit {
   @Input() lookupObject: LookupObject;
-  @Output() save = new EventEmitter<LookupObject>();
+  @Output() saved = new EventEmitter<LookupObject>();
 
   public lookupObjectForm: FormGroup;
   public saving: boolean = false;
@@ -30,13 +30,14 @@ export class LookupObjectComponent implements OnInit {
     //type adres
     this.lookupObjectForm = this.builder.group({
       bron: [this.lookupObject.bron],
+      weergavenaam: [this.lookupObject.weergavenaam],      
       type: [this.lookupObject.type],
-      woonplaatsnaam: [this.lookupObject.woonplaatsnaam],
-      weergavenaam: [this.lookupObject.weergavenaam],
-      gemeentenaam: [this.lookupObject.gemeentenaam],
+      gemeentenaam: [this.lookupObject.gemeentenaam],      
+      straatnaam: [this.lookupObject.straatnaam],
       huisnummer: [this.lookupObject.huisnummer],
       huisletter: [this.lookupObject.huisletter],
-      straatnaam: [this.lookupObject.straatnaam],
+      postcode: [this.lookupObject.postcode],
+      woonplaatsnaam: [this.lookupObject.woonplaatsnaam],      
       aliassen: [this.lookupObject.aliassen]
     });
   }
@@ -48,10 +49,16 @@ export class LookupObjectComponent implements OnInit {
       this.saving = true;
       this.lookupObject = Object.assign(this.lookupObject, this.lookupObjectForm.value);
       this.lookupService.updateFakeLookup(this.lookupObject).then((result) => {
-        console.log('lookupSaved', this.lookupObject);
-        //not needed but hey it's nice
+        console.log('lookupSaved', result);
+        this.lookupObjectForm.patchValue(result); //needed for weergavenaam
+        /*
+        this.lookupObjectForm.patchValue({
+          weergavenaam: result.weergavenaam
+        });
+        */
+
         this.saving = false;
-        this.save.emit(this.lookupObject);
+        this.saved.emit(result);
       });
     }
     

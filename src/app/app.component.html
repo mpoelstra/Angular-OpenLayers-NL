@@ -25,7 +25,7 @@
       <mat-tab label="Wijzig">
         <div class="tab-content">
           <mat-card *ngIf="lookupResult && lookupResult.weergavenaam == searchInput">
-            <app-lookup-object [lookupObject]="lookupResult"></app-lookup-object>
+            <app-lookup-object [lookupObject]="lookupResult" (saved)="onLookupResultSaved($event)"></app-lookup-object>
           </mat-card>
           <mat-card *ngIf="!lookupResult || lookupResult.weergavenaam != searchInput">
             Zoek en selecteer eerst een adres
