@@ -3,7 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatInputModule, MatButtonToggleModule, MatListModule, MatCardModule, MatExpansionModule, MatButtonModule, MatIconModule, MatTabsModule, MatProgressSpinnerModule } from '@angular/material';
+import { MatInputModule, MatButtonToggleModule, MatListModule, MatCardModule, MatExpansionModule, MatButtonModule, MatIconModule, MatTabsModule, MatProgressSpinnerModule, MatSnackBarModule, MatDialogModule } from '@angular/material';
 import { NgModule } from '@angular/core';
 
 // Imports for loading & configuring the in-memory web api
@@ -21,7 +21,7 @@ import { SuggestService  } from './pdok/suggest.service';
 import { LookupService } from './pdok/lookup.service';
 import { OpenlayersService } from './openlayers/openlayers.service';
 import { FeaturesService } from './openlayers/features.service';
-import { LookupObjectComponent } from './pdok/lookup-object/lookup-object.component';
+import { LookupObjectComponent, LookupObjectComponentDialog } from './pdok/lookup-object/lookup-object.component';
 
 
 @NgModule({
@@ -29,8 +29,10 @@ import { LookupObjectComponent } from './pdok/lookup-object/lookup-object.compon
     AppComponent,
     MapComponent,
     WmtsComponent,
-    LookupObjectComponent
+    LookupObjectComponent,
+    LookupObjectComponentDialog
   ],
+  entryComponents: [LookupObjectComponentDialog],
   imports: [
     BrowserModule,
     HttpModule,
@@ -47,7 +49,9 @@ import { LookupObjectComponent } from './pdok/lookup-object/lookup-object.compon
     MatButtonModule,
     MatIconModule,
     MatTabsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSnackBarModule,
+    MatDialogModule
   ],
   providers: [
     SuggestService,
