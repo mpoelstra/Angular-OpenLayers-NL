@@ -19,8 +19,7 @@ export class LookupService {
   private lookupUrl: string = 'http://geodata.nationaalgeoregister.nl/locatieserver/v3/lookup';
   private lookupQuery: string = '?id=';
 
-  private fakeLookupUrl: string = 'api/lookups'; //zilvermeer 2
-  private overrideId: string = 'adr-778f549625333e262b0bc23f1e4dde0e'; //zilvermeer 2
+  private fakeLookupUrl: string = 'api/lookups';
 
   constructor(private http: HttpClient, private oldHttp: Http) { }
 
@@ -41,10 +40,27 @@ export class LookupService {
         .then((response) => response.json() as LookupObject);
   }
 
-  updateFakeLookup(lookupObject: LookupObject): Promise<LookupObject> {
-    let postValue = Object.assign({}, lookupObject);
+  updateFakeLookup(postValue: LookupObject): Promise<LookupObject> {
     if (postValue.type === 'adres') {
-      postValue.weergavenaam = `${postValue.straatnaam} ${postValue.huisnummer}${postValue.huisletter}, ${postValue.postcode} ${postValue.woonplaatsnaam}`;
+      postValue.huis_nlt = `${postValue.huisnummer}${postValue.huisletter ? postValue.huisletter : ''}`;
+      postValue.weergavenaam = `${postValue.straatnaam} ${postValue.huis_nlt}, ${postValue.postcode} ${postValue.woonplaatsnaam}`;
+    }
+
+    if (postValue.type === 'weg') {
+      postValue.straatnaam_verkort = postValue.straatnaam;
+      postValue.weergavenaam = `${postValue.straatnaam}, ${postValue.woonplaatsnaam}`;
+    }
+
+    if (postValue.type === 'woonplaats') {
+      postValue.weergavenaam = `${postValue.woonplaatsnaam}, ${postValue.gemeentenaam}, ${postValue.provincienaam}`
+    }
+
+    if (postValue.type === 'gemeente') {
+      postValue.weergavenaam = `Gemeente ${postValue.gemeentenaam}`;
+    }
+
+    if (postValue.type === 'postcode') {
+      postValue.weergavenaam = `${postValue.straatnaam}, ${postValue.postcode}, ${postValue.woonplaatsnaam}`;
     }
     
     const url = `${this.fakeLookupUrl}/${postValue.id}`;
