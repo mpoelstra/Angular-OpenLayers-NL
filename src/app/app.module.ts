@@ -21,6 +21,7 @@ import { SuggestService  } from './pdok/suggest.service';
 import { LookupService } from './pdok/lookup.service';
 import { OpenlayersService } from './openlayers/openlayers.service';
 import { FeaturesService } from './openlayers/features.service';
+import { LoggerService } from './logging/logger.service';
 import { LookupObjectComponent, LookupObjectComponentDialog, MotivationDialog } from './pdok/lookup-object/lookup-object.component';
 
 
@@ -58,7 +59,8 @@ import { LookupObjectComponent, LookupObjectComponentDialog, MotivationDialog } 
     SuggestService,
     LookupService,
     OpenlayersService,
-    FeaturesService
+    FeaturesService,
+    LoggerService
   ],
   bootstrap: [AppComponent]
 })

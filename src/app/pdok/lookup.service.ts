@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 
 import { LookupObject } from './lookup-object';
+import { LoggerService } from '../logging/logger.service';
 
 interface IlookupResponse {
   response: {
@@ -21,14 +22,21 @@ export class LookupService {
 
   private fakeLookupUrl: string = 'api/lookups';
 
-  constructor(private http: HttpClient, private oldHttp: Http) { }
+  constructor(private http: HttpClient, private oldHttp: Http, private logger: LoggerService) { }
 
   lookup(id: string): Promise<LookupObject[]> {
     console.log('Get lookup', encodeURI(this.lookupUrl + this.lookupQuery + id));
     return this.http
       .get<IlookupResponse>(this.lookupUrl + this.lookupQuery + id)
       .toPromise()
-      .then(result => result.response.docs)
+      .then(result => { 
+        this.logger.log('info', 'lookup succesvol voor ' + id).subscribe(response => {
+          console.log('logging succeed');
+        }, err => {
+          console.log('logging failed');
+        });
+        return result.response.docs;
+      })
       .catch(this.handleError);
   }
 
