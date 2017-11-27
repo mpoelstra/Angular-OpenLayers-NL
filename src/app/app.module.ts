@@ -21,7 +21,7 @@ import { SuggestService  } from './pdok/suggest.service';
 import { LookupService } from './pdok/lookup.service';
 import { OpenlayersService } from './openlayers/openlayers.service';
 import { FeaturesService } from './openlayers/features.service';
-import { LookupObjectComponent, LookupObjectComponentDialog } from './pdok/lookup-object/lookup-object.component';
+import { LookupObjectComponent, LookupObjectComponentDialog, MotivationDialog } from './pdok/lookup-object/lookup-object.component';
 
 
 @NgModule({
@@ -30,9 +30,10 @@ import { LookupObjectComponent, LookupObjectComponentDialog } from './pdok/looku
     MapComponent,
     WmtsComponent,
     LookupObjectComponent,
-    LookupObjectComponentDialog
+    LookupObjectComponentDialog,
+    MotivationDialog
   ],
-  entryComponents: [LookupObjectComponentDialog],
+  entryComponents: [LookupObjectComponentDialog, MotivationDialog],
   imports: [
     BrowserModule,
     HttpModule,

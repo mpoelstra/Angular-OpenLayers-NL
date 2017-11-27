@@ -40,28 +40,32 @@ export class LookupService {
         .then((response) => response.json() as LookupObject);
   }
 
-  updateFakeLookup(postValue: LookupObject): Promise<LookupObject> {
-    if (postValue.type === 'adres') {
-      postValue.huis_nlt = `${postValue.huisnummer}${postValue.huisletter ? postValue.huisletter : ''}`;
-      postValue.weergavenaam = `${postValue.straatnaam} ${postValue.huis_nlt}, ${postValue.postcode} ${postValue.woonplaatsnaam}`;
+  updateFakeLookup(lookupObject: LookupObject, motivation: string): Promise<LookupObject> {
+    let postValue:any = {};
+
+    if (lookupObject.type === 'adres') {
+      lookupObject.huis_nlt = `${lookupObject.huisnummer}${lookupObject.huisletter ? lookupObject.huisletter : ''}`;
+      lookupObject.weergavenaam = `${lookupObject.straatnaam} ${lookupObject.huis_nlt}, ${lookupObject.postcode} ${lookupObject.woonplaatsnaam}`;
     }
 
-    if (postValue.type === 'weg') {
-      postValue.straatnaam_verkort = postValue.straatnaam;
-      postValue.weergavenaam = `${postValue.straatnaam}, ${postValue.woonplaatsnaam}`;
+    if (lookupObject.type === 'weg') {
+      lookupObject.straatnaam_verkort = lookupObject.straatnaam;
+      lookupObject.weergavenaam = `${lookupObject.straatnaam}, ${lookupObject.woonplaatsnaam}`;
     }
 
-    if (postValue.type === 'woonplaats') {
-      postValue.weergavenaam = `${postValue.woonplaatsnaam}, ${postValue.gemeentenaam}, ${postValue.provincienaam}`
+    if (lookupObject.type === 'woonplaats') {
+      lookupObject.weergavenaam = `${lookupObject.woonplaatsnaam}, ${lookupObject.gemeentenaam}, ${lookupObject.provincienaam}`
     }
 
-    if (postValue.type === 'gemeente') {
-      postValue.weergavenaam = `Gemeente ${postValue.gemeentenaam}`;
+    if (lookupObject.type === 'gemeente') {
+      lookupObject.weergavenaam = `Gemeente ${lookupObject.gemeentenaam}`;
     }
 
-    if (postValue.type === 'postcode') {
-      postValue.weergavenaam = `${postValue.straatnaam}, ${postValue.postcode}, ${postValue.woonplaatsnaam}`;
+    if (lookupObject.type === 'postcode') {
+      lookupObject.weergavenaam = `${lookupObject.straatnaam}, ${lookupObject.postcode}, ${lookupObject.woonplaatsnaam}`;
     }
+
+    postValue = Object.assign({}, lookupObject, {'motivation': motivation});
     
     const url = `${this.fakeLookupUrl}/${postValue.id}`;
     const json = JSON.stringify(postValue);

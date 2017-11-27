@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { MatSnackBar, MatDialog, MAT_DIALOG_DATA} from '@angular/material';
+import { MatSnackBar, MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
 import { LookupService } from '../lookup.service';
 import { LookupObject } from '../lookup-object';
@@ -16,6 +16,7 @@ export class LookupObjectComponent implements OnInit {
 
   public lookupObjectForm: FormGroup;
   public saving: boolean = false;
+  private motivation: string;
 
   constructor(
     private builder: FormBuilder, 
@@ -24,18 +25,10 @@ export class LookupObjectComponent implements OnInit {
     private dialog: MatDialog) {}
 
   ngOnInit() {
-    // this.movieForm = new FormGroup({
-    //   name: new FormControl(this.movie.name, Validators.compose([Validators.required, Validators.minLength(4)])),
-    //   genre: new FormControl(this.movie.genre, [Validators.required]),
-    //   rating: new FormControl(this.movie.rating, [ratingValidator(1, 10)])
-    // });
-
-    //type adres
     this.lookupObjectForm = this.builder.group({
       bron: [{value: this.lookupObject.bron, disabled: true}],
       weergavenaam: [{value: this.lookupObject.weergavenaam, disabled: true}],
       type: [{value: this.lookupObject.type, disabled: true}]
-      //gemeentenaam: [this.lookupObject.gemeentenaam, [Validators.required]]
     });
 
     if (this.lookupObject.type === 'adres') {
@@ -73,23 +66,38 @@ export class LookupObjectComponent implements OnInit {
 
   onSaveClicked() {
     let newLookUpObject: LookupObject;
+
     console.log('save');
     if (this.lookupObjectForm.valid) {
-      this.saving = true;
       newLookUpObject = Object.assign({}, this.lookupObject, this.lookupObjectForm.value);
-      this.lookupService.updateFakeLookup(newLookUpObject)
-        .then((result) => {
-          console.log('lookupSaved', result);
-          this.lookupObjectForm.patchValue(result); //needed for weergavenaam
-          this.openSnackBar('Het object is succesvol bijgewerkt', 'ok');
-          this.saving = false;
-          this.saved.emit(result);
-        })
-        .catch((error) => {
-          this.openSnackBar('Er is iets misgegaan, probeer het later nog eens', 'ok', 5000);
-          this.lookupObjectForm.reset(this.lookupObject);
-          this.saving = false;
-        });
+
+      let motivationDialogRef = this.dialog.open(MotivationDialog, {
+        data: {
+          motivation: this.motivation
+        }
+      });
+
+      motivationDialogRef.afterClosed().subscribe(result => {
+        this.motivation = result ? result.motivation : '';
+
+        if (this.motivation && result.type === 'submit') {
+          this.saving = true;
+          this.lookupService.updateFakeLookup(newLookUpObject, this.motivation)
+          .then((result) => {
+            console.log('lookupSaved', result);
+            this.lookupObjectForm.patchValue(result); //needed for weergavenaam
+            this.openSnackBar('Het object is succesvol bijgewerkt', 'ok');
+            this.saving = false;
+            this.motivation = '';
+            this.saved.emit(result);
+          })
+          .catch((error) => {
+            this.openSnackBar('Er is iets misgegaan, probeer het later nog eens', 'ok', 5000);
+            this.lookupObjectForm.reset(this.lookupObject);
+            this.saving = false;
+          });
+        }
+      });
     } else {
       this.openSnackBar('Niet alle velden zijn correct ingevoerd', 'ok');
     }
@@ -123,4 +131,42 @@ export class LookupObjectComponent implements OnInit {
 })
 export class LookupObjectComponentDialog {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
+}
+
+@Component({
+  selector: 'dialog-motivation',
+  template: `<h2>Wat heb je aangepast en waarom?</h2>
+  <form #motivationForm="ngForm" (ngSubmit)="submitDialog(motivationForm)">
+  <mat-form-field style="width:100%;">
+    <textarea matInput placeholder="Motivatie" matTextareaAutosize matAutosizeMinRows="5" matAutosizeMaxRows="10" name="motivation" [(ngModel)]="motivation" required></textarea>
+  </mat-form-field>
+  <div class="button-row">
+    <button mat-raised-button color="primary" type="submit">Opslaan</button>
+    <button mat-raised-button (click)="closeDialog(motivationForm)" type="button">Sluiten</button>
+  </div>`,
+})
+export class MotivationDialog implements OnInit {
+  public motivation: string;
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<MotivationDialog>) { }
+
+  ngOnInit() {
+    this.motivation = this.data.motivation;
+  }
+
+  submitDialog(form) {
+    if (form.valid) {
+      this.dialogRef.close({
+        type: 'submit',
+        motivation: form.value.motivation
+      });
+    }
+  }
+
+  closeDialog(form) {
+    this.dialogRef.close({
+      type: 'close',
+      motivation: form.value.motivation
+    });
+  }
 }
