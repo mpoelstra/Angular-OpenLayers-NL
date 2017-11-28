@@ -13,7 +13,7 @@
         
             <div *ngIf="searching && searchInput" class="suggestions">
               <mat-nav-list *ngIf="suggestionResults.length">
-                  <a mat-list-item href="#" (click)="onSuggestionClicked(suggestion)" *ngFor="let suggestion of suggestionResults | slice:0:10">{{ suggestion.weergavenaam }}</a>
+                  <a mat-list-item href="#" (click)="onSuggestionClicked(suggestion, i)" *ngFor="let suggestion of suggestionResults | slice:0:10; let i = index">{{ suggestion.weergavenaam }}</a>
               </mat-nav-list>
               <p *ngIf="suggestionCount === 0">Geen resultaten</p>
             </div>
@@ -72,6 +72,26 @@
           </mat-card>
           <mat-card *ngIf="!selectedPoint">
             Klik ergens op de kaart.
+          </mat-card>
+        </div>
+      </mat-tab>
+      <mat-tab label="Log">
+        <div class="tab-content">
+          <mat-card>
+            <table>
+              <tr>
+                <th>Time</th>
+                <th>Type</th>
+                <th>Log</th>
+                <th>Sent</th>
+              </tr>
+              <tr *ngFor="let logEntry of log">
+                <td>{{logEntry.time}}</td>
+                <td>{{logEntry.type}}</td>
+                <td>{{logEntry.log}}</td>
+                <td>{{logEntry.sent}}</td>
+              </tr>
+            </table>
           </mat-card>
         </div>
       </mat-tab>

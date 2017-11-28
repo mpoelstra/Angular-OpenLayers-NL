@@ -30,14 +30,13 @@ export class LookupService {
       .get<IlookupResponse>(this.lookupUrl + this.lookupQuery + id)
       .toPromise()
       .then(result => { 
-        this.logger.log('info', 'lookup succesvol voor ' + id).subscribe(response => {
-          console.log('logging succeed');
-        }, err => {
-          console.log('logging failed');
-        });
+        this.logger.logInfo(`lookup succesvol voor ${id}`);
         return result.response.docs;
       })
-      .catch(this.handleError);
+      .catch((error: any) => {
+        this.logger.logError(`Ophalen lookup object is mislukt ${error.message}`);
+        return Promise.reject(error);
+      });
   }
 
   getFakeLookUp(id:string): Promise<LookupObject> {
@@ -81,13 +80,14 @@ export class LookupService {
     return this.oldHttp
       .put(url, json)
       .toPromise()
-      .then(() => postValue)
-      .catch(this.handleError);
-  }
-
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error);
-    return Promise.reject(error);
+      .then(() => {
+        this.logger.logInfo(`Object ${postValue.id} is succesvol gewijzigd`);
+        return postValue
+      })
+      .catch((error: any) => {
+        this.logger.logError(`Updaten lookup object is mislukt ${error.message}`);
+        return Promise.reject(error);
+      });
   }
 
 }

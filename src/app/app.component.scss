@@ -73,3 +73,13 @@
 .tab-content {
     padding: 10px 2px;
 }
+
+table {
+    border-collapse: collapse;
+    font-size: 10px;
+    th, td {
+        text-align: left;
+        padding: .5em;
+        vertical-align: top;
+    }
+}

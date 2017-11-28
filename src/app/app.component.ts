@@ -8,6 +8,7 @@ import { LookupObject } from './pdok/lookup-object';
 import { MapPointerEvent } from './openlayers/util/map-pointer-event';
 
 import { FeaturesService } from './openlayers/features.service';
+import { LoggerService } from './logging/logger.service';
 
 @Component({
   selector: 'app-root',
@@ -47,9 +48,13 @@ export class AppComponent implements OnInit {
 
   public selectedInputTab: number = 0;
 
-  constructor(private suggestService: SuggestService, private lookupService: LookupService, private featuresService: FeaturesService) {
+  //session log
+  public log;
+
+  constructor(private suggestService: SuggestService, private lookupService: LookupService, private featuresService: FeaturesService, private loggerService: LoggerService) {
     this.suggestionResults = [];
     this.featureResults = [];
+    this.log = this.loggerService.logHistory;
   }
 
   ngOnInit() {
@@ -73,9 +78,11 @@ export class AppComponent implements OnInit {
     this.searchTerm$.next(this.searchInput);
   }
 
-  onSuggestionClicked(suggestion: Suggestion) {
+  onSuggestionClicked(suggestion: Suggestion, index: number) {
     this.searching = false;
     this.lookingup = true;
+
+    this.loggerService.logInfo(`Gezocht op: ${this.searchInput}, Geklikt op zoekresultaat nummer: ${index + 1}: ${suggestion.weergavenaam} met als id ${suggestion.id}`);
 
     this.lookupService.getFakeLookUp(suggestion.id).then(result => {
       console.log('fake result', result);
