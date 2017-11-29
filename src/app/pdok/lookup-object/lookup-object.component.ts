@@ -89,6 +89,7 @@ export class LookupObjectComponent implements OnInit {
             this.openSnackBar('Het object is succesvol bijgewerkt', 'ok');
             this.saving = false;
             this.motivation = '';
+            this.lookupObjectForm.markAsPristine();
             this.saved.emit(result);
           })
           .catch((error) => {
