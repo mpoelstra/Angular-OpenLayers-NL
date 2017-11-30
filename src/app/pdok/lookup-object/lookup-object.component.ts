@@ -35,7 +35,7 @@ export class LookupObjectComponent implements OnInit {
 
     if (this.lookupObject.type === 'adres') {
       this.lookupObjectForm.addControl('gemeentenaam', new FormControl(this.lookupObject.gemeentenaam, [Validators.required]));
-      this.lookupObjectForm.addControl('huisnummer', new FormControl(this.lookupObject.huisnummer, [Validators.required]));
+      this.lookupObjectForm.addControl('huisnummer', new FormControl(this.lookupObject.huisnummer, [Validators.required, Validators.min(1)]));
       this.lookupObjectForm.addControl('huisletter', new FormControl(this.lookupObject.huisletter));
       this.lookupObjectForm.addControl('straatnaam', new FormControl(this.lookupObject.straatnaam, [Validators.required]));
       this.lookupObjectForm.addControl('postcode', new FormControl(this.lookupObject.postcode, [Validators.required]));

@@ -1,6 +1,6 @@
 <mat-progress-spinner class="spinner" color="primary" mode="indeterminate" [class.show]="saving"></mat-progress-spinner>
 
-<form [formGroup]="markerForm" (ngSubmit)="onSaveClicked()" novalidate [class.is-saving]="saving">
+<form [formGroup]="markerForm" (ngSubmit)="onSaveClicked()" novalidate [class.is-saving]="saving" #myform="ngForm">
 
   <mat-form-field>
     <input matInput type="text" placeholder="bron" name="bron" formControlName="bron">
@@ -19,6 +19,7 @@
   <mat-form-field>
     <input matInput type="text" placeholder="naam" name="naam" formControlName="naam">
     <mat-icon matSuffix color="primary">mode_edit</mat-icon>
+    <mat-hint align="end" *ngIf="markerForm.get('naam').hasError('required') && (myform.submitted || markerForm.get('naam').touched)"><span class="error">Verplicht</span></mat-hint>
   </mat-form-field>
   <mat-form-field>
     <input matInput type="text" placeholder="nummer" name="nummer" formControlName="nummer">
@@ -30,8 +31,9 @@
         {{ status.viewValue }}
       </mat-option>
     </mat-select>
+    <mat-hint align="end" *ngIf="markerForm.get('status').hasError('required') && (myform.submitted || markerForm.get('status').touched)"><span class="error">Verplicht</span></mat-hint>
   </mat-form-field>
-  <mat-form-field style="width:100%;">
+  <mat-form-field>
     <textarea matInput placeholder="omschrijving" matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="5" name="omschrijving" formControlName="omschrijving"></textarea>
   </mat-form-field>
   

@@ -1,14 +1,16 @@
 <mat-progress-spinner class="spinner" color="primary" mode="indeterminate" [class.show]="saving"></mat-progress-spinner>
 
-<form [formGroup]="lookupObjectForm" (ngSubmit)="onSaveClicked()" novalidate [class.is-saving]="saving">
+<form [formGroup]="lookupObjectForm" (ngSubmit)="onSaveClicked()" novalidate [class.is-saving]="saving" #myform="ngForm">
 
   <mat-form-field>
     <input matInput type="text" placeholder="bron" name="bron" formControlName="bron">
     <mat-icon matSuffix color="primary" (click)="openSource()" title="Bekijk bron" class="open_source">open_in_new</mat-icon>
   </mat-form-field>
+
   <mat-form-field>
     <input matInput type="text" placeholder="weergavenaam" name="weergavenaam" formControlName="weergavenaam">
   </mat-form-field>
+
   <mat-form-field>
     <input matInput type="text" #type placeholder="type" name="type" formControlName="type">
   </mat-form-field>
@@ -16,27 +18,39 @@
   <mat-form-field *ngIf="lookupObjectForm.controls.gemeentenaam">
     <input matInput type="text" placeholder="gemeentenaam" name="gemeentenaam" formControlName="gemeentenaam">
     <mat-icon matSuffix color="primary">mode_edit</mat-icon>
+    <mat-hint align="end" *ngIf="lookupObjectForm.get('gemeentenaam').hasError('required') && (myform.submitted || lookupObjectForm.get('gemeentenaam').touched)"><span class="error">Verplicht</span></mat-hint>
   </mat-form-field>
+
   <mat-form-field *ngIf="lookupObjectForm.controls.straatnaam">
     <input matInput type="text" placeholder="straatnaam" name="straatnaam" formControlName="straatnaam">
     <mat-icon matSuffix color="primary">mode_edit</mat-icon>
+    <mat-hint align="end" *ngIf="lookupObjectForm.get('straatnaam').hasError('required') && (myform.submitted || lookupObjectForm.get('straatnaam').touched)"><span class="error">Verplicht</span></mat-hint>
   </mat-form-field>
+  
   <mat-form-field *ngIf="lookupObjectForm.controls.huisnummer">
-    <input matInput type="number" placeholder="huisnummer" min="1" name="huisnummer" formControlName="huisnummer">
+    <input matInput type="number" placeholder="huisnummer" name="huisnummer" formControlName="huisnummer">
     <mat-icon matSuffix color="primary">mode_edit</mat-icon>
+    <mat-hint align="end" *ngIf="lookupObjectForm.get('huisnummer').hasError('min')  && (myform.submitted || lookupObjectForm.get('huisnummer').touched)"><span class="error">Minimaal 1</span></mat-hint>
+    <mat-hint align="end" *ngIf="lookupObjectForm.get('huisnummer').hasError('required')  && (myform.submitted || lookupObjectForm.get('huisnummer').touched)"><span class="error">Verplicht</span></mat-hint>
   </mat-form-field>
+
   <mat-form-field *ngIf="lookupObjectForm.controls.huisletter">
     <input matInput type="text" placeholder="huisletter" name="huisletter" formControlName="huisletter">
     <mat-icon matSuffix color="primary">mode_edit</mat-icon>
   </mat-form-field>
+
   <mat-form-field *ngIf="lookupObjectForm.controls.postcode">
     <input matInput type="text" placeholder="postcode" name="postcode" formControlName="postcode">
     <mat-icon matSuffix color="primary">mode_edit</mat-icon>
+    <mat-hint align="end" *ngIf="lookupObjectForm.get('postcode').hasError('required')  && (myform.submitted || lookupObjectForm.get('postcode').touched)"><span class="error">Verplicht</span></mat-hint>
   </mat-form-field>
+
   <mat-form-field *ngIf="lookupObjectForm.controls.woonplaatsnaam">
     <input matInput type="text" placeholder="woonplaatsnaam" name="woonplaatsnaam" formControlName="woonplaatsnaam">
     <mat-icon matSuffix color="primary">mode_edit</mat-icon>
+    <mat-hint align="end" *ngIf="lookupObjectForm.get('woonplaatsnaam').hasError('required')  && (myform.submitted || lookupObjectForm.get('woonplaatsnaam').touched)"><span class="error">Verplicht</span></mat-hint>
   </mat-form-field>
+  
   <mat-form-field>
     <input matInput type="text" placeholder="aliassen" name="aliassen" formControlName="aliassen">
     <mat-icon matSuffix color="primary">mode_edit</mat-icon>
