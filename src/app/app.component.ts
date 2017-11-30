@@ -51,6 +51,9 @@ export class AppComponent implements OnInit {
   //session log
   public log;
 
+  //new location
+  public showNewObject: boolean = false;
+
   constructor(private suggestService: SuggestService, private lookupService: LookupService, private featuresService: FeaturesService, private loggerService: LoggerService) {
     this.suggestionResults = [];
     this.featureResults = [];
@@ -81,6 +84,7 @@ export class AppComponent implements OnInit {
   onSuggestionClicked(suggestion: Suggestion, index: number) {
     this.searching = false;
     this.lookingup = true;
+    this.showNewObject = false;
 
     this.loggerService.logInfo(`Gezocht op: ${this.searchInput}, Geklikt op zoekresultaat nummer: ${index + 1}: ${suggestion.weergavenaam} met als id ${suggestion.id}`);
 
@@ -176,6 +180,10 @@ export class AppComponent implements OnInit {
   onLookupResultSaved(lookupObject: LookupObject) {
     this.lookupResult = lookupObject;
     this.searchInput = this.lookupResult.weergavenaam;
+  }
+
+  addLocation(selectedPoint: MapPointerEvent) {
+    this.showNewObject = true;
   }
   
 }

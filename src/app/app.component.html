@@ -48,12 +48,22 @@
                   </div>
                 </div>
               </section>
-
+              <button mat-raised-button color="primary" (click)="addLocation(selectedPoint)">Voeg locatie toe</button>
               <button mat-raised-button color="primary" (click)="centerMap(selectedPoint)">Centreer op de kaart</button>
             </div>
-    
+          </mat-card>
+          <mat-card *ngIf="showNewObject">
             <div class="block">
-
+                <app-marker [point]="selectedPoint" (cancelled)="showNewObject = false" (saved)="showNewObject = false"></app-marker>
+            </div>
+          </mat-card>
+          <mat-card *ngIf="showFeaturesSpinner">
+            <div class="block">
+                <mat-progress-spinner class="spinner" color="primary" mode="indeterminate"></mat-progress-spinner>
+            </div>
+          </mat-card>
+          <mat-card *ngIf="featureResults.length">
+            <div class="block">
               <mat-progress-spinner class="spinner" color="primary" mode="indeterminate" *ngIf="showFeaturesSpinner"></mat-progress-spinner>
 
               <section class="feature" *ngFor="let featureResult of featureResults">
@@ -67,7 +77,6 @@
                   </div>
                 </div>
               </section>
-
             </div>
           </mat-card>
           <mat-card *ngIf="!selectedPoint">

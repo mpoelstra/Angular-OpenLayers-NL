@@ -1,6 +1,8 @@
 import { InMemoryDbService } from 'angular-in-memory-web-api';
 export class InMemoryDataService implements InMemoryDbService {
   createDb() {
+    let markers = [];
+
     let lookups = [
         {
           id: 'adr-778f549625333e262b0bc23f1e4dde0e', //zilvermeer 2, adr-778f549625333e262b0bc23f1e4dde0e
@@ -17,33 +19,6 @@ export class InMemoryDataService implements InMemoryDbService {
         }
       ];
 
-      let moviesFav = [
-        {
-            id: 1,
-            name: 'terminator',
-            genre: 'scifi',
-            rating: 9
-        },
-        {
-            id: 2,
-            name: 'star wars',
-            genre: 'scifi',
-            rating: 8
-        },
-        {
-            id: 3,
-            name: 'pulp fiction',
-            genre: 'drama',
-            rating: 7
-        },
-        {
-            id: 4,
-            name: 'shrek',
-            genre: 'animation',
-            rating: 5
-        }
-      ];
-
-      return {lookups, moviesFav};
+      return {markers, lookups};
   }
 }

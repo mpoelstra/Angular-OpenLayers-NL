@@ -2,6 +2,8 @@ import { Component, OnInit, Inject, Input, Output, EventEmitter } from '@angular
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { MatSnackBar, MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
+import { MotivationComponent } from '../dialogs/motivation/motivation.component';
+import { DebugComponent } from '../dialogs/debug/debug.component';
 import { LookupService } from '../lookup.service';
 import { LookupObject } from '../lookup-object';
 
@@ -67,11 +69,10 @@ export class LookupObjectComponent implements OnInit {
   onSaveClicked() {
     let newLookUpObject: LookupObject;
 
-    console.log('save');
     if (this.lookupObjectForm.valid) {
       newLookUpObject = Object.assign({}, this.lookupObject, this.lookupObjectForm.value);
 
-      let motivationDialogRef = this.dialog.open(MotivationDialog, {
+      let motivationDialogRef = this.dialog.open(MotivationComponent, {
         data: {
           motivation: this.motivation
         }
@@ -84,7 +85,6 @@ export class LookupObjectComponent implements OnInit {
           this.saving = true;
           this.lookupService.updateFakeLookup(newLookUpObject, this.motivation)
           .then((result) => {
-            console.log('lookupSaved', result);
             this.lookupObjectForm.patchValue(result); //needed for weergavenaam
             this.openSnackBar('Het object is succesvol bijgewerkt', 'ok');
             this.saving = false;
@@ -106,7 +106,6 @@ export class LookupObjectComponent implements OnInit {
   }
 
   onResetClicked(form: FormGroup) {
-    console.log('onResetClicked');
     form.reset(this.lookupObject);
   }
 
@@ -117,57 +116,11 @@ export class LookupObjectComponent implements OnInit {
   }
 
   openSource() {
-    this.dialog.open(LookupObjectComponentDialog, {
+    this.dialog.open(DebugComponent, {
       data: {
         object: this.lookupObject
       }
     });
   }
 
-}
-
-@Component({
-  selector: 'dialog-data-example-dialog',
-  template: '<h1>Bron object</h1><pre>{{data.object | json}}</pre>',
-})
-export class LookupObjectComponentDialog {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
-}
-
-@Component({
-  selector: 'dialog-motivation',
-  template: `<h2>Wat heb je aangepast en waarom?</h2>
-  <form #motivationForm="ngForm" (ngSubmit)="submitDialog(motivationForm)">
-  <mat-form-field style="width:100%;">
-    <textarea matInput placeholder="Motivatie" matTextareaAutosize matAutosizeMinRows="5" matAutosizeMaxRows="10" name="motivation" [(ngModel)]="motivation" required></textarea>
-  </mat-form-field>
-  <div class="button-row">
-    <button mat-raised-button color="primary" type="submit">Opslaan</button>
-    <button mat-raised-button (click)="closeDialog(motivationForm)" type="button">Sluiten</button>
-  </div>`,
-})
-export class MotivationDialog implements OnInit {
-  public motivation: string;
-
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<MotivationDialog>) { }
-
-  ngOnInit() {
-    this.motivation = this.data.motivation;
-  }
-
-  submitDialog(form) {
-    if (form.valid) {
-      this.dialogRef.close({
-        type: 'submit',
-        motivation: form.value.motivation
-      });
-    }
-  }
-
-  closeDialog(form) {
-    this.dialogRef.close({
-      type: 'close',
-      motivation: form.value.motivation
-    });
-  }
 }
