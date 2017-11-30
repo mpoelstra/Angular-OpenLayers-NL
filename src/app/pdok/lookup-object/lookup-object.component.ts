@@ -123,4 +123,11 @@ export class LookupObjectComponent implements OnInit {
     });
   }
 
+  onNumberKeydown(event) {
+    let invalidKeys = ['e', '+', '-'];
+    if (invalidKeys.includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+
 }

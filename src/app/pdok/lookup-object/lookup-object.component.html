@@ -28,7 +28,7 @@
   </mat-form-field>
   
   <mat-form-field *ngIf="lookupObjectForm.controls.huisnummer">
-    <input matInput type="number" placeholder="huisnummer" name="huisnummer" formControlName="huisnummer">
+    <input matInput type="number" placeholder="huisnummer" min="1" name="huisnummer" formControlName="huisnummer" (keydown)="onNumberKeydown($event)">
     <mat-icon matSuffix color="primary">mode_edit</mat-icon>
     <mat-hint align="end" *ngIf="lookupObjectForm.get('huisnummer').hasError('min')  && (myform.submitted || lookupObjectForm.get('huisnummer').touched)"><span class="error">Minimaal 1</span></mat-hint>
     <mat-hint align="end" *ngIf="lookupObjectForm.get('huisnummer').hasError('required')  && (myform.submitted || lookupObjectForm.get('huisnummer').touched)"><span class="error">Verplicht</span></mat-hint>
