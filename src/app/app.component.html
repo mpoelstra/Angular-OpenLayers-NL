@@ -1,5 +1,5 @@
 <div class="view">
-  <app-wmts class="view_map" [center]="mapCenter" [zoom]="mapZoom" (mapClicked)="onMapClicked($event)"></app-wmts>
+  <app-wmts class="view_map" [center]="mapCenter" [zoom]="mapZoom" [markers]="markers" (mapClicked)="onMapClicked($event)"></app-wmts>
   <div class="view_controls">
     <mat-tab-group #ref [(selectedIndex)]="selectedInputTab">
       <mat-tab label="Zoeken">
@@ -54,7 +54,7 @@
           </mat-card>
           <mat-card *ngIf="showNewObject">
             <div class="block">
-                <app-marker [point]="selectedPoint" (cancelled)="showNewObject = false" (saved)="showNewObject = false"></app-marker>
+                <app-marker [point]="selectedPoint" (cancelled)="showNewObject = false" (saved)="onMarkerSaved($event)"></app-marker>
             </div>
           </mat-card>
           <mat-card *ngIf="showFeaturesSpinner">

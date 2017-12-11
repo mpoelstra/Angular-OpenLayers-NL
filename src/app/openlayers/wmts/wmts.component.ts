@@ -10,6 +10,14 @@ import Interaction from 'ol/interaction';
 import { MapPointerEvent } from '../util/map-pointer-event';
 import { OpenlayersService } from '../openlayers.service';
 import { TileWmsLayer } from '../layers/tileWmsLayer';
+import { Marker } from '../../pdok/marker/marker';
+
+import Feature from 'ol/feature';
+import Point from 'ol/geom/point';
+import VectorSource from 'ol/source/vector';
+import VectorLayer from 'ol/layer/vector';
+import Style from 'ol/style/style';
+import Icon from 'ol/style/icon';
 
 @Component({
   selector: 'app-wmts',
@@ -19,6 +27,7 @@ import { TileWmsLayer } from '../layers/tileWmsLayer';
 export class WmtsComponent implements OnInit, OnChanges {
   @Input() center: number[];
   @Input() zoom: number;
+  @Input() markers: Marker[];
 
   @Output() mapClicked = new EventEmitter();
 
@@ -48,10 +57,16 @@ export class WmtsComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    
     if (this.map) {
       this.map.getView().setCenter(this.center);
       this.map.getView().setZoom(this.zoom);
+
+      if (changes.markers && changes.markers.currentValue !== changes.markers.previousValue) {
+        this.addMarkers();
+      }
     }
+
   }
 
   ngOnInit() {
@@ -71,6 +86,7 @@ export class WmtsComponent implements OnInit, OnChanges {
     this.viewProjection = this.map.getView().getProjection();
     
     this.addEventListeners();
+    this.addMarkers();
   }
 
   addEventListeners(): void {
@@ -97,6 +113,54 @@ export class WmtsComponent implements OnInit, OnChanges {
       console.log('clicked on pixel', event.pixel);
       this.mapClicked.emit(mapEvent);
     });
+  }
+
+  addMarkers() {
+    let markers = this.markers;
+    let features = [];
+
+    //debugger;
+    if (markers) {
+      for (let marker of markers) {
+        let feature = new Feature({
+          geometry : new Point(marker.coordinate),
+          name: marker.naam
+        });
+
+        //debugger;
+
+        features.push(feature);
+      };
+
+      if (features.length) {
+
+      var vectorSource = new VectorSource({
+        features: features //add an array of features
+      });
+      
+      var iconStyle = new Style({
+        image: new Icon(({
+          anchor: [0.5, 46],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          opacity: 1,
+          src: './assets/images/marker.png'
+        }))
+      });
+      
+      
+      var vectorLayer = new VectorLayer({
+        source: vectorSource,
+        style: iconStyle
+      });
+      
+      //debugger;
+
+      this.map.addLayer(vectorLayer);
+
+      }
+
+    }
   }
 
   getMapControls(): any[] {

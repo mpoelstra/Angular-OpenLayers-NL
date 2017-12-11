@@ -33,4 +33,20 @@ export class MarkerService {
       });
   }
 
+  getMarkers(): Promise<Marker[]> {
+    const url = this.fakeMarkerUrl;
+
+    return this.oldHttp
+      .get(url)
+      .toPromise()
+      .then((response) => {
+        this.logger.logInfo(`Markers succesvol opgehaald`);
+        return response.json() as Marker[];
+      })
+      .catch((error: any) => {
+        this.logger.logError(`Markers kunnen niet worden opgeslagen ${error.message}`);
+        return Promise.reject(error);
+      });
+  }
+
 }

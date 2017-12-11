@@ -6,9 +6,11 @@ import { LookupService } from './pdok/lookup.service';
 import { Suggestion } from './pdok/suggestion';
 import { LookupObject } from './pdok/lookup-object';
 import { MapPointerEvent } from './openlayers/util/map-pointer-event';
+import { Marker } from './pdok/marker/marker';
 
 import { FeaturesService } from './openlayers/features.service';
 import { LoggerService } from './logging/logger.service';
+import { MarkerService } from './pdok/marker.service';
 
 @Component({
   selector: 'app-root',
@@ -54,7 +56,10 @@ export class AppComponent implements OnInit {
   //new location
   public showNewObject: boolean = false;
 
-  constructor(private suggestService: SuggestService, private lookupService: LookupService, private featuresService: FeaturesService, private loggerService: LoggerService) {
+  public markers: Marker[];
+
+  constructor(private suggestService: SuggestService, private lookupService: LookupService, private featuresService: FeaturesService, private loggerService: LoggerService, private markerService: MarkerService
+  ) {
     this.suggestionResults = [];
     this.featureResults = [];
     this.log = this.loggerService.logHistory;
@@ -64,7 +69,9 @@ export class AppComponent implements OnInit {
 
     //default mapView values
     this.mapCenter = [150000, 450000];
-    this.mapZoom = 8;
+    this.mapZoom = 3;
+
+    this.initMarkers();
 
     //will only go into subscribe method when searchTems&.next is being called
     this.suggestService.search(this.searchTerm$)
@@ -72,6 +79,16 @@ export class AppComponent implements OnInit {
       //console.log(results);
       this.suggestionResults = results.response.docs;
       this.suggestionCount = results.response.numFound; 
+    });
+
+
+
+  }
+
+  initMarkers(): void{
+    this.markerService.getMarkers().then((response) => {
+      //debugger;
+      this.markers = response;
     });
   }
 
@@ -180,6 +197,11 @@ export class AppComponent implements OnInit {
   onLookupResultSaved(lookupObject: LookupObject) {
     this.lookupResult = lookupObject;
     this.searchInput = this.lookupResult.weergavenaam;
+  }
+
+  onMarkerSaved(event) {
+    this.showNewObject = false;
+    this.initMarkers();
   }
 
   addLocation(selectedPoint: MapPointerEvent) {
