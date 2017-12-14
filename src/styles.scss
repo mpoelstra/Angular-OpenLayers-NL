@@ -15,6 +15,7 @@ html {
 //overrides angular material
 .mat-tab-label {
     min-width: 0 !important;
+    padding: 0 10px !important;
 }
 
 :focus {

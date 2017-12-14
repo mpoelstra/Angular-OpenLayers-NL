@@ -6,13 +6,14 @@
     display: flex;
     .view_map {
         width: 75%;
+        height: 100%;
         position: relative;
     }
     .view_controls {
         width: 25%;
         overflow: hidden;
         overflow-y: auto;
-        background: #f7f7f7;
+        background: #eee;
         padding: .5em;
         
         mat-form-field {
@@ -30,15 +31,16 @@
 }
 
 .feature__row {
-    display: flex;
+    display: block;
+    white-space: nowrap;
     width: 100%;
     overflow-x: auto;
+    height: 70px;
+    margin-bottom: 20px;
 }
 
 .feature__wrapper {
-    display: inline-flex;
-    flex-direction: column;
-    margin-bottom: 20px;
+    display: inline-block;
     > div {
         padding: 5px;
         border: 1px solid #eee;
