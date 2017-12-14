@@ -14,10 +14,16 @@ import { Marker } from '../../pdok/marker/marker';
 
 import Feature from 'ol/feature';
 import Point from 'ol/geom/point';
+import ClusterSource from 'ol/source/cluster';
 import VectorSource from 'ol/source/vector';
 import VectorLayer from 'ol/layer/vector';
 import Style from 'ol/style/style';
 import Icon from 'ol/style/icon';
+import Circle from 'ol/style/circle';
+import Stroke from 'ol/style/stroke';
+import Fill from 'ol/style/fill';
+import Text from 'ol/style/text';
+
 
 @Component({
   selector: 'app-wmts',
@@ -137,6 +143,11 @@ export class WmtsComponent implements OnInit, OnChanges {
       var vectorSource = new VectorSource({
         features: features //add an array of features
       });
+
+      var clusterSource = new ClusterSource({
+        distance: 40,
+        source: vectorSource
+      });
       
       var iconStyle = new Style({
         image: new Icon(({
@@ -148,10 +159,35 @@ export class WmtsComponent implements OnInit, OnChanges {
         }))
       });
       
-      
+      var styleCache = {};
       var vectorLayer = new VectorLayer({
-        source: vectorSource,
-        style: iconStyle
+        source: clusterSource,
+        //style: iconStyle
+        style: function(feature, resolution) {
+          var size = feature.get('features').length;
+          var style = styleCache[size];
+          if (!style) {
+            style = [new Style({
+              image: new Circle({
+                radius: 10,
+                stroke: new Stroke({
+                  color: '#fff'
+                }),
+                fill: new Fill({
+                  color: '#3f51b5'
+                })
+              }),
+              text: new Text({
+                text: size.toString(),
+                fill: new Fill({
+                  color: '#fff'
+                })
+              })
+            })];
+            styleCache[size] = style;
+          }
+          return style;
+        }
       });
       
       //debugger;

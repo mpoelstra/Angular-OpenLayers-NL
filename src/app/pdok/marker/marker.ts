@@ -4,7 +4,7 @@ export class Marker {
     public coordinate: number[];
     public centroide_rd: string;
 
-    public id: string | number;
+    public id: string;
     public naam: string;
     public nummer: string;
     public status: string;

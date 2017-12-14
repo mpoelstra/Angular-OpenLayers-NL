@@ -84,20 +84,21 @@ export class MarkerComponent implements OnInit {
 
         if (this.motivation && result.type === 'submit') {
           this.saving = true;
-          this.markerService.saveMarker(newMarker, this.motivation)
-          .then((result) => {
-            console.log('markerSaved', result);
-            this.markerForm.patchValue(result); //needed for weergavenaam
-            this.openSnackBar('Het object is succesvol toegevoegd', 'ok');
-            this.saving = false;
-            this.motivation = '';
-            this.markerForm.markAsPristine();
-            this.saved.emit(result);
-          })
-          .catch((error) => {
-            this.openSnackBar('Er is iets misgegaan, probeer het later nog eens', 'ok', 5000);
-            this.markerForm.reset(this.marker);
-            this.saving = false;
+
+
+          this.markerService.saveMarker(newMarker, this.motivation).subscribe(result => {
+            this.markerSuccesfulSaved(result);
+          }, err => {
+            console.log('real backend failed, save fakeMarker');
+            this.markerService.saveFakeMarker(newMarker, this.motivation)
+            .then((result) => {
+              this.markerSuccesfulSaved(result);
+            })
+            .catch((error) => {
+              this.openSnackBar('Er is iets misgegaan, probeer het later nog eens', 'ok', 5000);
+              this.markerForm.reset(this.marker);
+              this.saving = false;
+            });
           });
         }
       });
@@ -105,6 +106,16 @@ export class MarkerComponent implements OnInit {
       this.openSnackBar('Niet alle velden zijn correct ingevoerd', 'ok');
     }
     
+  }
+
+  markerSuccesfulSaved(result) {
+    console.log('markerSaved', result);
+    this.markerForm.patchValue(result); //needed for weergavenaam
+    this.openSnackBar('Het object is succesvol toegevoegd', 'ok');
+    this.saving = false;
+    this.motivation = '';
+    this.markerForm.markAsPristine();
+    this.saved.emit(result);
   }
 
   onResetClicked(form: FormGroup) {
