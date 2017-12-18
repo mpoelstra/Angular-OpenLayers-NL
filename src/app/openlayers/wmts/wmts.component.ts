@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
 import Map from 'ol/map';
+import Overlay from 'ol/overlay';
 import View from 'ol/view';
 import Zoom from 'ol/control/zoom';
 import ZoomSlider from 'ol/control/zoomslider';
@@ -49,6 +50,7 @@ export class WmtsComponent implements OnInit, OnChanges {
   private layers;
   private layersHistory;
   private viewProjection;
+  private overlay;
 
   constructor(private openlayersService: OpenlayersService) {
     this.wmtsLayers = this.openlayersService.getAvailableWMTSLayers();
@@ -93,6 +95,7 @@ export class WmtsComponent implements OnInit, OnChanges {
     
     this.addEventListeners();
     this.addMarkers();
+    this.addOverlay();
   }
 
   addEventListeners(): void {
@@ -112,8 +115,40 @@ export class WmtsComponent implements OnInit, OnChanges {
             url: url
           });
       });
+
       
-      //debugger;
+
+      this.overlay.setPosition(); //hideOverlay
+      let markers = this.map.getFeaturesAtPixel(event.pixel);
+
+      if (markers) {
+        let features = markers[0].get('features');
+
+        if (features && features.length === 1) {
+          let marker: Marker = features[0].get('marker');
+          let coords = features[0].getGeometry().getCoordinates();
+          this.overlay.getElement().innerHTML = 
+          `<table>
+            <tr>
+              <th>Naam:</th><td>${marker.naam}</td>
+            </tr>
+            <tr>
+              <th>Coordinaat RD:</th><td>${marker.centroide_rd}</td>
+            </tr>
+            <tr>
+              <th>Id:</th><td>${marker.id}</td>
+            </tr>
+            <tr>
+              <th>Type:</th><td>${marker.type}</td>
+            </tr>
+            <tr>
+              <th>Reden toevoeging:</th><td>${marker.motivation}</td>
+            </tr>
+           </table>`;
+          this.overlay.setPosition(coords);
+        }
+      }
+      
       let mapEvent = new MapPointerEvent(event.coordinate, event.map, event.orginalEvent, event.pixel, event.type, features);
       console.log('clicked on coordinate', event.coordinate);
       console.log('clicked on pixel', event.pixel);
@@ -130,10 +165,11 @@ export class WmtsComponent implements OnInit, OnChanges {
       for (let marker of markers) {
         let feature = new Feature({
           geometry : new Point(marker.coordinate),
-          name: marker.naam
+          marker: marker
         });
 
         //debugger;
+        feature.setId(marker.id);
 
         features.push(feature);
       };
@@ -197,6 +233,15 @@ export class WmtsComponent implements OnInit, OnChanges {
       }
 
     }
+  }
+
+  addOverlay() {
+    this.overlay = new Overlay({
+      element: document.getElementById('popup-container'),
+      positioning: 'bottom-center',
+      offset: [0, -10]
+    });
+    this.map.addOverlay(this.overlay);
   }
 
   getMapControls(): any[] {

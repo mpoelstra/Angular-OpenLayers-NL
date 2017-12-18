@@ -3,6 +3,7 @@ export class Marker {
     public type: string;
     public coordinate: number[];
     public centroide_rd: string;
+    public motivation: string;
 
     public id: string;
     public naam: string;
